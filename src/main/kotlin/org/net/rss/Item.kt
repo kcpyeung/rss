@@ -9,6 +9,7 @@ class Item(private val node: Node) {
     val title = getAsString("title")
     val link = getAsString("link")
     val description = getAsString("description")
+    val pubDate = getAsString("pubDate")
 
     private fun get(path: String): NodeList {
         val xpFactory = XPathFactory.newInstance()
