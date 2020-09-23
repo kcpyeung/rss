@@ -31,4 +31,8 @@ class RssTest {
     @Test fun rss_has_category() {
         assertThat(Rss(rss).category, `is`("Australian Broadcasting Corporation: All content"))
     }
+
+    @Test fun rss_has_title() {
+        assertThat(Rss(rss).title, `is`("Victoria articles feed"))
+    }
 }
