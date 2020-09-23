@@ -7,6 +7,8 @@ import javax.xml.xpath.XPathFactory
 
 class Item(private val node: Node) {
     val title = getAsString("title")
+    val link = getAsString("link")
+    val description = getAsString("description")
 
     private fun get(path: String): NodeList {
         val xpFactory = XPathFactory.newInstance()
@@ -16,6 +18,6 @@ class Item(private val node: Node) {
     }
 
     private fun getAsString(path: String): String? {
-        return get(path).item(0)?.textContent
+        return get(path).item(0)?.textContent?.trim()
     }
 }
