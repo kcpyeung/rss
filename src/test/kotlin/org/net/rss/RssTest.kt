@@ -1,7 +1,7 @@
 package org.net.rss
 
-import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 class RssTest {

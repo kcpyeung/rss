@@ -12,19 +12,30 @@ class Rss(rss: String) {
     private val doc: Document
     val category: String?
     val title: String?
+    val items = mutableListOf<Item>()
 
     init {
         doc = getXmlDoc(rss)
-        category = get("/rss/channel/category")
-        title = get("/rss/channel/title")
+        category = getAsString("/rss/channel/category")
+        title = getAsString("/rss/channel/title")
+
+        val itemNodeList = get("/rss/channel/item")
+        if (itemNodeList.length > 0) {
+            for (i in 0..itemNodeList.length - 1) {
+                items.add(Item(itemNodeList.item(i)))
+            }
+        }
     }
 
-    private fun get(path: String): String? {
+    private fun get(path: String): NodeList {
         val xpFactory = XPathFactory.newInstance()
         val xPath = xpFactory.newXPath()
 
-        val nodes = xPath.evaluate(path, doc, XPathConstants.NODESET) as NodeList
-        return nodes.item(0)?.textContent
+        return xPath.evaluate(path, doc, XPathConstants.NODESET) as NodeList
+    }
+
+    private fun getAsString(path: String): String? {
+        return get(path).item(0)?.textContent
     }
 
     private fun getXmlDoc(rss: String): Document {
