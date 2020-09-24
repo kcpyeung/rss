@@ -19,7 +19,7 @@ class FeedDiv(rss: Rss) {
     }
 
     private fun start(): String {
-        return "<div id=\"${id}\">${textContent}"
+        return "<div id=\"${id}\">${textContent}\n"
     }
 
     private fun end(): String {

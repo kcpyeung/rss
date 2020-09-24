@@ -11,7 +11,7 @@ class ItemDiv(index: Int, private val item: Item, feedDiv: FeedDiv) {
         buffer.append("<div id=\"${id}\">").append("\n")
         buffer.append("    <div><a href=\"${link()}\">${title()}</a></div>").append("\n")
         buffer.append("    <div>${description()}</div>").append("\n")
-        buffer.append("</div>")
+        buffer.append("</div>").append("\n")
 
         return buffer.toString()
     }
