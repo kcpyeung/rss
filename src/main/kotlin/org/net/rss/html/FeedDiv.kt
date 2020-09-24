@@ -5,7 +5,7 @@ import org.net.rss.Rss
 class FeedDiv(rss: Rss) {
     private val textContent = rss.title
     val id = textContent?.toLowerCase()?.replace(" ", "_")
-    val children = rss.items.map { ItemDiv(it) }
+    val children = rss.items.mapIndexed { index, item -> ItemDiv(index, item, this) }
 
     override fun toString(): String {
         val buffer = StringBuilder(1024)

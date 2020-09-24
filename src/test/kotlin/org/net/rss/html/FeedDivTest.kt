@@ -2,6 +2,7 @@ package org.net.rss.html
 
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
 
@@ -36,24 +37,39 @@ class FeedDivTest {
 </rss>
 """.trimIndent()
 
-    @Test fun div_id_is_feed_title() {
-        val div = FeedDiv(Rss(rssWith2Items))
+    @Nested inner class FeedRelatedTests {
+        @Test
+        fun div_id_is_feed_title() {
+            val div = FeedDiv(Rss(rssWith2Items))
 
-        assertThat(div.id, `is`("victoria_articles_feed"))
+            assertThat(div.id, `is`("victoria_articles_feed"))
+        }
+
+        @Test
+        fun feed_div_has_title_plus_items() {
+            val div = FeedDiv(Rss(rssWith2Items))
+
+            assertThat(div.children.size, `is`(2))
+        }
+
+        @Test
+        fun feed_div_contains_feed_title() {
+            val div = FeedDiv(Rss(rssWith2Items))
+
+            val toString = div.toString()
+
+            assertThat(toString, startsWith("""<div id="victoria_articles_feed">Victoria articles feed"""))
+            assertThat(toString, endsWith("</div>"))
+        }
     }
 
-    @Test fun feed_div_has_title_plus_items() {
-        val div = FeedDiv(Rss(rssWith2Items))
+    @Nested inner class ItemRelatedTests {
+        @Test
+        fun `item id is feed id plus item index`() {
+            val div = FeedDiv(Rss(rssWith2Items))
 
-        assertThat(div.children.size, `is`(2))
-    }
-
-    @Test fun feed_div_contains_feed_title() {
-        val div = FeedDiv(Rss(rssWith2Items))
-
-        val toString = div.toString()
-
-        assertThat(toString, startsWith("""<div id="victoria_articles_feed">Victoria articles feed"""))
-        assertThat(toString, endsWith("</div>"))
+            assertThat(div.children[0].id, `is`("victoria_articles_feed-0"))
+            assertThat(div.children[1].id, `is`("victoria_articles_feed-1"))
+        }
     }
 }
