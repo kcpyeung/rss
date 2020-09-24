@@ -1,11 +1,11 @@
 package org.net.rss.html
 
-import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
 
-class DivTest {
+class FeedDivTest {
     val rssWith2Items = """
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -37,8 +37,23 @@ class DivTest {
 """.trimIndent()
 
     @Test fun div_id_is_feed_title() {
-        val div = Div(Rss(rssWith2Items))
+        val div = FeedDiv(Rss(rssWith2Items))
 
         assertThat(div.id, `is`("victoria_articles_feed"))
+    }
+
+    @Test fun feed_div_has_title_plus_items() {
+        val div = FeedDiv(Rss(rssWith2Items))
+
+        assertThat(div.children.size, `is`(2))
+    }
+
+    @Test fun feed_div_contains_feed_title() {
+        val div = FeedDiv(Rss(rssWith2Items))
+
+        val toString = div.toString()
+
+        assertThat(toString, startsWith("""<div id="victoria_articles_feed">Victoria articles feed"""))
+        assertThat(toString, endsWith("</div>"))
     }
 }
