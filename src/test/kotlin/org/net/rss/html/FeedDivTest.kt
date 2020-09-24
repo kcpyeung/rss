@@ -71,5 +71,17 @@ class FeedDivTest {
             assertThat(div.children[0].id, `is`("victoria_articles_feed-0"))
             assertThat(div.children[1].id, `is`("victoria_articles_feed-1"))
         }
+
+        @Test
+        fun `item div has all item details`() {
+            val div = FeedDiv(Rss(rssWith2Items))
+
+            assertThat(div.children[0].toString(), `is`("""
+                <div id="victoria_articles_feed-0">
+                    <div><a href="https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598">How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community</a></div>
+                    <div><p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p></div>
+                </div>
+            """.trimIndent()))
+        }
     }
 }
