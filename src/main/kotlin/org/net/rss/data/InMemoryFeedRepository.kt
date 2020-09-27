@@ -6,7 +6,12 @@ class InMemoryFeedRepository {
     val feeds = hashMapOf<String, Rss>()
 
     fun add(source: String, rss: Rss) {
-        feeds[source] = rss
+        val stored = feeds[source]
+        if (stored == null) {
+            feeds[source] = rss
+        } else {
+            stored.items.addAll(rss.items)
+        }
     }
 
     fun hasSource(source: String): Boolean {

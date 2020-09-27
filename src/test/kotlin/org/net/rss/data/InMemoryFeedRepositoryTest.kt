@@ -29,6 +29,29 @@ class InMemoryFeedRepositoryTest {
 </rss>
 """.trimIndent()
 
+    private val rss2WithNoOverlap = """
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Victoria articles feed</title>
+    <category>Australian Broadcasting Corporation: All content</category>
+    <item>
+        <title>Title 3</title>
+        <link>https://somenews.com/3</link>
+        <description>description 3</description>
+        <pubDate>Mon, 15 Sep 2020 20:50:00 +1000</pubDate>
+    </item>
+    <item>
+        <title>Title 4</title>
+        <link>https://somenews.com/4</link>
+        <description>description 4</description>
+        <pubDate>Mon, 15 Sep 2020 20:51:10 +1000</pubDate>
+    </item>
+  </channel>
+</rss>
+""".trimIndent()
+
     @Test
     fun `emtpy repo stores all items`() {
         val rss = Rss(rss1)
@@ -38,5 +61,15 @@ class InMemoryFeedRepositoryTest {
 
         assertThat(repo.hasSource("https://somenews.com"), `is`(true))
         assertThat(repo.get("https://somenews.com")?.items?.size, `is`(2))
+    }
+
+    @Test
+    fun `adding new items to existing feed appends if no overlap`() {
+        val repo = InMemoryFeedRepository()
+        repo.add("https://somenews.com", Rss(rss1))
+
+        repo.add("https://somenews.com", Rss(rss2WithNoOverlap))
+
+        assertThat(repo.get("https://somenews.com")?.items?.size, `is`(4))
     }
 }
