@@ -9,6 +9,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.*
 
 class ItemTest {
 
@@ -49,6 +50,7 @@ class ItemTest {
         </description>
     </item>
     <item>
+        <guid>F44F0AAA-78ED-4374-9F93-AFF05829E218</guid>
         <title>Footage of a man being arrested by police in Melbourne&#039;s north.</title>
         <link>https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386</link>
         <description>
@@ -94,5 +96,18 @@ class ItemTest {
 
         assertThat(rss.items[0].pubDate, `is`("Sun, 27 Sep 2020 17:30:00 +1000"))
         assertThat(rss.items[1].pubDate, `is`("Mon, 14 Sep 2020 20:51:10 +1000"))
+    }
+
+    @Test
+    fun `generates item guid if missing from rss xml`() {
+        mockkStatic("java.util.UUID")
+        every {
+            UUID.randomUUID()
+        } returns UUID(1,1)
+
+        val rss = Rss(rssWith2Items)
+
+        assertThat(rss.items[0].guid, `is`("00000000-0000-0001-0000-000000000001"))
+        assertThat(rss.items[1].guid, `is`("F44F0AAA-78ED-4374-9F93-AFF05829E218"))
     }
 }

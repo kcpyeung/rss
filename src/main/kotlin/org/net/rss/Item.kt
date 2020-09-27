@@ -4,10 +4,12 @@ import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
 class Item(private val node: Node) {
+    val guid = getAsString("guid") ?: UUID.randomUUID().toString()
     val title = getAsString("title")
     val link = getAsString("link")
     val description = getAsString("description")
