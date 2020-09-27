@@ -4,13 +4,18 @@ import io.mockk.every
 import io.mockk.mockkStatic
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.w3c.dom.NodeList
+import org.xml.sax.InputSource
+import java.io.StringReader
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.xml.parsers.DocumentBuilderFactory
 
 class ItemTest {
     val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
@@ -105,11 +110,61 @@ class ItemTest {
         mockkStatic("java.util.UUID")
         every {
             UUID.randomUUID()
-        } returns UUID(1,1)
+        } returns UUID(1, 1)
 
         val rss = Rss(rssWith2Items, dateFormat)
 
         assertThat(rss.items[0].guid, `is`("00000000-0000-0001-0000-000000000001"))
         assertThat(rss.items[1].guid, `is`("F44F0AAA-78ED-4374-9F93-AFF05829E218"))
+    }
+
+    @Nested
+    inner class Sorting {
+        private fun get(xml: String): NodeList {
+            val dbFactory = DocumentBuilderFactory.newInstance()
+            val dBuilder = dbFactory.newDocumentBuilder()
+            val xmlInput = InputSource(StringReader(xml))
+            val doc = dBuilder.parse(xmlInput)
+
+            doc.normalizeDocument()
+
+            return doc.getElementsByTagName("item")
+        }
+
+        @Test
+        fun `sort items by pubDate ascendingly if different`() {
+            val i1 = Item(get("""<item>
+                <guid>later</guid><title>t1</title><link>https://news.org/1</link><description>d1</description>
+                <pubDate>Tue, 15 Sep 2020 20:51:10 +1000</pubDate>
+                </item>""".trimIndent()).item(0), DateTimeFormatter.RFC_1123_DATE_TIME)
+            val i2 = Item(get("""<item>
+                <guid>earlier</guid><title>t2</title><link>https://news.org/2</link><description>d2</description>
+                <pubDate>Mon, 14 Sep 2020 20:51:10 +1000</pubDate>
+                </item>""".trimIndent()).item(0), DateTimeFormatter.RFC_1123_DATE_TIME)
+
+            val list = listOf(i1, i2)
+            val sorted = list.sorted()
+
+            assertThat(sorted.get(0).guid, `is`("earlier"))
+            assertThat(sorted.get(1).guid, `is`("later"))
+        }
+
+        @Test
+        fun `sort items by guid ascendingly if pubDate identical`() {
+            val i1 = Item(get("""<item>
+                <guid>11111</guid><title>t1</title><link>https://news.org/1</link><description>d1</description>
+                <pubDate>Tue, 15 Sep 2020 20:51:10 +1000</pubDate>
+                </item>""".trimIndent()).item(0), DateTimeFormatter.RFC_1123_DATE_TIME)
+            val i2 = Item(get("""<item>
+                <guid>00000</guid><title>t2</title><link>https://news.org/2</link><description>d2</description>
+                <pubDate>Tue, 15 Sep 2020 20:51:10 +1000</pubDate>
+                </item>""".trimIndent()).item(0), DateTimeFormatter.RFC_1123_DATE_TIME)
+
+            val list = listOf(i1, i2)
+            val sorted = list.sorted()
+
+            assertThat(sorted.get(0).guid, `is`("00000"))
+            assertThat(sorted.get(1).guid, `is`("11111"))
+        }
     }
 }

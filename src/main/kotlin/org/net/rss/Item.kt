@@ -8,7 +8,7 @@ import java.util.*
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
-class Item(private val node: Node, dateFormat: DateTimeFormatter) {
+class Item(private val node: Node, dateFormat: DateTimeFormatter): Comparable<Item> {
     val guid = getAsString("guid") ?: UUID.randomUUID().toString()
     val title = getAsString("title")
     val link = getAsString("link")
@@ -24,5 +24,14 @@ class Item(private val node: Node, dateFormat: DateTimeFormatter) {
 
     private fun getAsString(path: String): String? {
         return get(path).item(0)?.textContent?.trim()
+    }
+
+    override fun compareTo(other: Item): Int {
+        val dateComparison = this.pubDate.compareTo(other.pubDate)
+        if (dateComparison != 0) {
+            return dateComparison
+        } else {
+            return this.guid.compareTo(other.guid)
+        }
     }
 }
