@@ -4,11 +4,12 @@ import org.w3c.dom.Document
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import java.io.StringReader
+import java.time.format.DateTimeFormatter
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
-class Rss(rss: String) {
+class Rss(rss: String, dateFormat: DateTimeFormatter) {
     private val doc: Document
     val category: String?
     val title: String?
@@ -22,7 +23,7 @@ class Rss(rss: String) {
         val itemNodeList = get("/rss/channel/item")
         if (itemNodeList.length > 0) {
             for (i in 0..itemNodeList.length - 1) {
-                items.add(Item(itemNodeList.item(i)))
+                items.add(Item(itemNodeList.item(i), dateFormat))
             }
         }
     }

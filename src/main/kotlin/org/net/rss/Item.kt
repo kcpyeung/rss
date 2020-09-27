@@ -8,12 +8,12 @@ import java.util.*
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
-class Item(private val node: Node) {
+class Item(private val node: Node, dateFormat: DateTimeFormatter) {
     val guid = getAsString("guid") ?: UUID.randomUUID().toString()
     val title = getAsString("title")
     val link = getAsString("link")
     val description = getAsString("description")
-    val pubDate = getAsString("pubDate") ?: DateTimeFormatter.RFC_1123_DATE_TIME.format(ZonedDateTime.now())
+    val pubDate = if (getAsString("pubDate") == null) ZonedDateTime.now() else ZonedDateTime.parse(getAsString("pubDate"), dateFormat)
 
     private fun get(path: String): NodeList {
         val xpFactory = XPathFactory.newInstance()

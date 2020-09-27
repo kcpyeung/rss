@@ -1,8 +1,10 @@
 package org.net.rss
 
+import java.time.format.DateTimeFormatter
+
 class Subscriptions {
-    val all = arrayOf(
-      "https://www.theguardian.com/au/rss",
-      "https://www.theage.com.au/rss/national/victoria.xml",
+    val all = arrayOf<Subscription>(
+      Subscription("https://www.theguardian.com/au/rss", DateTimeFormatter.RFC_1123_DATE_TIME),
+      Subscription("https://www.theage.com.au/rss/national/victoria.xml", DateTimeFormatter.RFC_1123_DATE_TIME),
     )
 }

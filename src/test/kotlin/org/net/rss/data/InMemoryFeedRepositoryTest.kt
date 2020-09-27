@@ -4,8 +4,11 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
+import java.time.format.DateTimeFormatter
 
 class InMemoryFeedRepositoryTest {
+    val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
+
     private val rss1 = """
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -40,13 +43,13 @@ class InMemoryFeedRepositoryTest {
         <title>Title 3</title>
         <link>https://somenews.com/3</link>
         <description>description 3</description>
-        <pubDate>Mon, 15 Sep 2020 20:50:00 +1000</pubDate>
+        <pubDate>Tue, 15 Sep 2020 20:50:00 +1000</pubDate>
     </item>
     <item>
         <title>Title 4</title>
         <link>https://somenews.com/4</link>
         <description>description 4</description>
-        <pubDate>Mon, 15 Sep 2020 20:51:10 +1000</pubDate>
+        <pubDate>Tue, 15 Sep 2020 20:51:10 +1000</pubDate>
     </item>
   </channel>
 </rss>
@@ -54,7 +57,7 @@ class InMemoryFeedRepositoryTest {
 
     @Test
     fun `emtpy repo stores all items`() {
-        val rss = Rss(rss1)
+        val rss = Rss(rss1, dateFormat)
         val repo = InMemoryFeedRepository()
 
         repo.add("https://somenews.com", rss)
@@ -66,9 +69,9 @@ class InMemoryFeedRepositoryTest {
     @Test
     fun `adding new items to existing feed appends if no overlap`() {
         val repo = InMemoryFeedRepository()
-        repo.add("https://somenews.com", Rss(rss1))
+        repo.add("https://somenews.com", Rss(rss1, dateFormat))
 
-        repo.add("https://somenews.com", Rss(rss2WithNoOverlap))
+        repo.add("https://somenews.com", Rss(rss2WithNoOverlap, dateFormat))
 
         assertThat(repo.get("https://somenews.com")?.items?.size, `is`(4))
     }

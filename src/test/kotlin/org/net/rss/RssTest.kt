@@ -3,8 +3,10 @@ package org.net.rss
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
+import java.time.format.DateTimeFormatter
 
 class RssTest {
+    val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
 
     val rss = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -29,10 +31,10 @@ class RssTest {
 """.trimIndent()
 
     @Test fun rss_has_category() {
-        assertThat(Rss(rss).category, `is`("Australian Broadcasting Corporation: All content"))
+        assertThat(Rss(rss, dateFormat).category, `is`("Australian Broadcasting Corporation: All content"))
     }
 
     @Test fun rss_has_title() {
-        assertThat(Rss(rss).title, `is`("Victoria articles feed"))
+        assertThat(Rss(rss, dateFormat).title, `is`("Victoria articles feed"))
     }
 }

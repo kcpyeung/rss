@@ -5,8 +5,11 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
+import java.time.format.DateTimeFormatter
 
 class FeedDivTest {
+    val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
+
     val rssWith2Items = """
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -40,21 +43,21 @@ class FeedDivTest {
     @Nested inner class FeedRelatedTests {
         @Test
         fun div_id_is_feed_title() {
-            val div = FeedDiv(Rss(rssWith2Items))
+            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
 
             assertThat(div.id, `is`("victoria_articles_feed"))
         }
 
         @Test
         fun feed_div_has_title_plus_items() {
-            val div = FeedDiv(Rss(rssWith2Items))
+            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
 
             assertThat(div.children.size, `is`(2))
         }
 
         @Test
         fun feed_div_contains_feed_title() {
-            val div = FeedDiv(Rss(rssWith2Items))
+            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
 
             val toString = div.toString()
 
@@ -64,7 +67,7 @@ class FeedDivTest {
 
         @Test
         fun `full feed html`() {
-            val div = FeedDiv(Rss(rssWith2Items))
+            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
 
             assertThat(div.toString(), `is`("""
                 <div id="victoria_articles_feed">Victoria articles feed
@@ -84,7 +87,7 @@ class FeedDivTest {
     @Nested inner class ItemRelatedTests {
         @Test
         fun `item id is feed id plus item index`() {
-            val div = FeedDiv(Rss(rssWith2Items))
+            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
 
             assertThat(div.children[0].id, `is`("victoria_articles_feed-0"))
             assertThat(div.children[1].id, `is`("victoria_articles_feed-1"))
@@ -92,7 +95,7 @@ class FeedDivTest {
 
         @Test
         fun `item div has all item details`() {
-            val div = FeedDiv(Rss(rssWith2Items))
+            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
 
             assertThat(div.children[0].toString(), `is`("""
                 <div id="victoria_articles_feed-0">

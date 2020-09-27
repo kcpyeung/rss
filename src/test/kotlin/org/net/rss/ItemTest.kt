@@ -9,9 +9,11 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ItemTest {
+    val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
 
     val rss = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -66,7 +68,7 @@ class ItemTest {
 
     @Test
     fun item_has_basic_properties() {
-        val item = Rss(rss).items[0]
+        val item = Rss(rss, dateFormat).items[0]
 
         assertThat(item.description, `is`("<p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p>"))
         assertThat(item.link, `is`("https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598"))
@@ -75,7 +77,7 @@ class ItemTest {
 
     @Test
     fun all_items_available() {
-        val rss = Rss(rssWith2Items)
+        val rss = Rss(rssWith2Items, dateFormat)
 
         assertThat(rss.items[0].description, `is`("<p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p>"))
         assertThat(rss.items[0].link, `is`("https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598"))
@@ -88,14 +90,14 @@ class ItemTest {
 
     @Test
     fun `pubDate defaults to current time if missing from rss xml`() {
-        val clock = Clock.fixed(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("Australia/Melbourne"))
+        val clock = Clock.fixed(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("+10:00"))
         mockkStatic("java.time.ZonedDateTime")
         every { ZonedDateTime.now() } returns ZonedDateTime.now(clock)
 
-        val rss = Rss(rssWith2Items)
+        val rss = Rss(rssWith2Items, dateFormat)
 
-        assertThat(rss.items[0].pubDate, `is`("Sun, 27 Sep 2020 17:30:00 +1000"))
-        assertThat(rss.items[1].pubDate, `is`("Mon, 14 Sep 2020 20:51:10 +1000"))
+        assertThat(rss.items[0].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("+10:00"))))
+        assertThat(rss.items[1].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-14T10:51:10Z"), ZoneId.of("+10:00"))))
     }
 
     @Test
@@ -105,7 +107,7 @@ class ItemTest {
             UUID.randomUUID()
         } returns UUID(1,1)
 
-        val rss = Rss(rssWith2Items)
+        val rss = Rss(rssWith2Items, dateFormat)
 
         assertThat(rss.items[0].guid, `is`("00000000-0000-0001-0000-000000000001"))
         assertThat(rss.items[1].guid, `is`("F44F0AAA-78ED-4374-9F93-AFF05829E218"))
