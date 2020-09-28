@@ -107,15 +107,15 @@ class ItemTest {
 
     @Test
     fun `generates item guid if missing from rss xml`() {
-        mockkStatic("java.util.UUID")
+        mockkStatic("java.util.Base64")
         every {
-            UUID.randomUUID()
-        } returns UUID(1, 1)
+            Base64.getEncoder().encodeToString(any())
+        } returns "kICr1LONJhcb6BKHyiM7BIzCFrU="
 
         val rss = Rss(rssWith2Items, dateFormat)
 
         assertThat(rss.items[0].guid, `is`("F44F0AAA-78ED-4374-9F93-AFF05829E218"))
-        assertThat(rss.items[1].guid, `is`("00000000-0000-0001-0000-000000000001"))
+        assertThat(rss.items[1].guid, `is`("kICr1LONJhcb6BKHyiM7BIzCFrU="))
     }
 
     @Nested

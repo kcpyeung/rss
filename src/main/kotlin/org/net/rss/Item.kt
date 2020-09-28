@@ -2,6 +2,7 @@ package org.net.rss
 
 import org.w3c.dom.Node
 import org.w3c.dom.NodeList
+import java.security.MessageDigest
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -9,11 +10,18 @@ import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
 class Item(private val node: Node, dateFormat: DateTimeFormatter): Comparable<Item> {
-    val guid = getAsString("guid") ?: UUID.randomUUID().toString()
     val title = getAsString("title")
     val link = getAsString("link")
     val description = getAsString("description")
     val pubDate = if (getAsString("pubDate") == null) ZonedDateTime.now() else ZonedDateTime.parse(getAsString("pubDate"), dateFormat)
+    val guid = getAsString("guid") ?: sha1()
+
+    private fun sha1(): String {
+        val input = "${title}:${link}:${description}:${pubDate}"
+        val digest = MessageDigest.getInstance("SHA-1").digest(input.toByteArray())
+
+        return Base64.getEncoder().encodeToString(digest)
+    }
 
     private fun get(path: String): NodeList {
         val xpFactory = XPathFactory.newInstance()
@@ -33,5 +41,20 @@ class Item(private val node: Node, dateFormat: DateTimeFormatter): Comparable<It
         } else {
             return this.guid.compareTo(other.guid)
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Item
+
+        if (guid != other.guid) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return guid.hashCode()
     }
 }
