@@ -72,37 +72,14 @@ class FeedDivTest {
             assertThat(div.toString(), `is`("""
                 <div id="victoria_articles_feed">Victoria articles feed
                 <div id="victoria_articles_feed-0">
-                    <div><a href="https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598">How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community</a></div>
-                    <div><p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p></div>
-                </div>
-                <div id="victoria_articles_feed-1">
                     <div><a href="https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386">Footage of a man being arrested by police in Melbourne's north.</a></div>
                     <div>Footage of the man's arrest showed him running from police and striking a police car, before he was hit by a police car.</div>
                 </div>
-                </div>
-            """.trimIndent()))
-        }
-    }
-
-    @Nested inner class ItemRelatedTests {
-        @Test
-        fun `item id is feed id plus item index`() {
-            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
-
-            assertThat(div.children[0].id, `is`("victoria_articles_feed-0"))
-            assertThat(div.children[1].id, `is`("victoria_articles_feed-1"))
-        }
-
-        @Test
-        fun `item div has all item details`() {
-            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
-
-            assertThat(div.children[0].toString(), `is`("""
-                <div id="victoria_articles_feed-0">
+                <div id="victoria_articles_feed-1">
                     <div><a href="https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598">How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community</a></div>
                     <div><p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p></div>
                 </div>
-                
+                </div>
             """.trimIndent()))
         }
     }

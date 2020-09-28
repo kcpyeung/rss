@@ -5,6 +5,7 @@ import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import java.io.StringReader
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
@@ -13,7 +14,7 @@ class Rss(rss: String, dateFormat: DateTimeFormatter) {
     private val doc: Document
     val category: String?
     val title: String?
-    val items = mutableListOf<Item>()
+    var items: List<Item>
 
     init {
         doc = getXmlDoc(rss)
@@ -21,11 +22,19 @@ class Rss(rss: String, dateFormat: DateTimeFormatter) {
         title = getAsString("/rss/channel/title")
 
         val itemNodeList = get("/rss/channel/item")
+        val list = mutableListOf<Item>()
         if (itemNodeList.length > 0) {
             for (i in 0..itemNodeList.length - 1) {
-                items.add(Item(itemNodeList.item(i), dateFormat))
+                list.add(Item(itemNodeList.item(i), dateFormat))
             }
         }
+        items = Collections.unmodifiableList(list.sorted())
+    }
+
+    fun addItems(newItems: List<Item>) {
+        val currentItems = this.items.toMutableSet()
+        currentItems.addAll(newItems)
+        this.items = currentItems.toList().sorted()
     }
 
     private fun get(path: String): NodeList {

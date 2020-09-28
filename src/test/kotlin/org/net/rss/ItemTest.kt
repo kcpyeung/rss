@@ -84,13 +84,13 @@ class ItemTest {
     fun all_items_available() {
         val rss = Rss(rssWith2Items, dateFormat)
 
-        assertThat(rss.items[0].description, `is`("<p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p>"))
-        assertThat(rss.items[0].link, `is`("https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598"))
-        assertThat(rss.items[0].title, `is`("How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community"))
+        assertThat(rss.items[0].description, `is`("Footage of the man's arrest showed him running from police and striking a police car, before he was hit by a police car."))
+        assertThat(rss.items[0].link, `is`("https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386"))
+        assertThat(rss.items[0].title, `is`("Footage of a man being arrested by police in Melbourne's north."))
 
-        assertThat(rss.items[1].description, `is`("Footage of the man's arrest showed him running from police and striking a police car, before he was hit by a police car."))
-        assertThat(rss.items[1].link, `is`("https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386"))
-        assertThat(rss.items[1].title, `is`("Footage of a man being arrested by police in Melbourne's north."))
+        assertThat(rss.items[1].description, `is`("<p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p>"))
+        assertThat(rss.items[1].link, `is`("https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598"))
+        assertThat(rss.items[1].title, `is`("How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community"))
     }
 
     @Test
@@ -101,8 +101,8 @@ class ItemTest {
 
         val rss = Rss(rssWith2Items, dateFormat)
 
-        assertThat(rss.items[0].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("+10:00"))))
-        assertThat(rss.items[1].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-14T10:51:10Z"), ZoneId.of("+10:00"))))
+        assertThat(rss.items[0].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-14T10:51:10Z"), ZoneId.of("+10:00"))))
+        assertThat(rss.items[1].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("+10:00"))))
     }
 
     @Test
@@ -114,8 +114,8 @@ class ItemTest {
 
         val rss = Rss(rssWith2Items, dateFormat)
 
-        assertThat(rss.items[0].guid, `is`("00000000-0000-0001-0000-000000000001"))
-        assertThat(rss.items[1].guid, `is`("F44F0AAA-78ED-4374-9F93-AFF05829E218"))
+        assertThat(rss.items[0].guid, `is`("F44F0AAA-78ED-4374-9F93-AFF05829E218"))
+        assertThat(rss.items[1].guid, `is`("00000000-0000-0001-0000-000000000001"))
     }
 
     @Nested
