@@ -1,15 +1,11 @@
 package org.net.rss
 
-import org.w3c.dom.Node
-import org.w3c.dom.NodeList
 import java.security.MessageDigest
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
-import javax.xml.xpath.XPathConstants
-import javax.xml.xpath.XPathFactory
+import java.util.Base64
 
-class Item(private val node: Node, dateFormat: DateTimeFormatter): Comparable<Item> {
+class Item(getAsString: (String) -> String?, dateFormat: DateTimeFormatter) : Comparable<Item> {
     val title = getAsString("title")
     val link = getAsString("link")
     val description = getAsString("description")
@@ -21,17 +17,6 @@ class Item(private val node: Node, dateFormat: DateTimeFormatter): Comparable<It
         val digest = MessageDigest.getInstance("SHA-1").digest(input.toByteArray())
 
         return Base64.getEncoder().encodeToString(digest)
-    }
-
-    private fun get(path: String): NodeList {
-        val xpFactory = XPathFactory.newInstance()
-        val xPath = xpFactory.newXPath()
-
-        return xPath.evaluate(path, node, XPathConstants.NODESET) as NodeList
-    }
-
-    private fun getAsString(path: String): String? {
-        return get(path).item(0)?.textContent?.trim()
     }
 
     override fun compareTo(other: Item): Int {

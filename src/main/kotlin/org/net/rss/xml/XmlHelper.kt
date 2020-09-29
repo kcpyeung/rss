@@ -1,0 +1,53 @@
+package org.net.rss.xml
+
+import org.w3c.dom.Node
+import org.w3c.dom.NodeList
+import org.xml.sax.InputSource
+import java.io.StringReader
+import java.util.Collections
+import javax.xml.parsers.DocumentBuilderFactory
+import javax.xml.xpath.XPathConstants
+import javax.xml.xpath.XPathFactory
+
+class XmlHelper(xml: String) {
+    private val doc = getXmlDoc(xml)
+
+    fun getAsString(path: String): String? {
+        return getAsString0(doc, path)
+    }
+
+    fun getLookups(path: String): List<(String) -> String?> {
+        val nodeList = get(doc, path)
+        val list = arrayListOf<(String) -> String?>()
+        if (nodeList.length > 0) {
+            for (i in 0 until nodeList.length) {
+                val node = nodeList.item(i)
+                list += { getAsString0(node, it) }
+            }
+        }
+
+        return Collections.unmodifiableList(list)
+    }
+
+    private fun get(node: Node, path: String): NodeList {
+        val xpFactory = XPathFactory.newInstance()
+        val xPath = xpFactory.newXPath()
+
+        return xPath.evaluate(path, node, XPathConstants.NODESET) as NodeList
+    }
+
+    private fun getAsString0(node: Node, path: String): String? {
+        return get(node, path).item(0)?.textContent?.trim()
+    }
+
+    private fun getXmlDoc(rss: String): Node {
+        val dbFactory = DocumentBuilderFactory.newInstance()
+        val dBuilder = dbFactory.newDocumentBuilder()
+        val xmlInput = InputSource(StringReader(rss))
+        val doc = dBuilder.parse(xmlInput)
+
+        doc.normalizeDocument()
+
+        return doc
+    }
+}

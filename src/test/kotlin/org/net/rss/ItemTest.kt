@@ -6,16 +6,12 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.w3c.dom.NodeList
-import org.xml.sax.InputSource
-import java.io.StringReader
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import javax.xml.parsers.DocumentBuilderFactory
 
 class ItemTest {
     val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
@@ -120,27 +116,10 @@ class ItemTest {
 
     @Nested
     inner class Sorting {
-        private fun get(xml: String): NodeList {
-            val dbFactory = DocumentBuilderFactory.newInstance()
-            val dBuilder = dbFactory.newDocumentBuilder()
-            val xmlInput = InputSource(StringReader(xml))
-            val doc = dBuilder.parse(xmlInput)
-
-            doc.normalizeDocument()
-
-            return doc.getElementsByTagName("item")
-        }
-
         @Test
         fun `sort items by pubDate ascendingly if different`() {
-            val i1 = Item(get("""<item>
-                <guid>later</guid><title>t1</title><link>https://news.org/1</link><description>d1</description>
-                <pubDate>Tue, 15 Sep 2020 20:51:10 +1000</pubDate>
-                </item>""".trimIndent()).item(0), DateTimeFormatter.RFC_1123_DATE_TIME)
-            val i2 = Item(get("""<item>
-                <guid>earlier</guid><title>t2</title><link>https://news.org/2</link><description>d2</description>
-                <pubDate>Mon, 14 Sep 2020 20:51:10 +1000</pubDate>
-                </item>""".trimIndent()).item(0), DateTimeFormatter.RFC_1123_DATE_TIME)
+            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "later" }, DateTimeFormatter.RFC_1123_DATE_TIME)
+            val i2 = Item({ if (it == "pubDate") "Mon, 14 Sep 2020 20:51:10 +1000" else "earlier" }, DateTimeFormatter.RFC_1123_DATE_TIME)
 
             val list = listOf(i1, i2)
             val sorted = list.sorted()
@@ -151,14 +130,8 @@ class ItemTest {
 
         @Test
         fun `sort items by guid ascendingly if pubDate identical`() {
-            val i1 = Item(get("""<item>
-                <guid>11111</guid><title>t1</title><link>https://news.org/1</link><description>d1</description>
-                <pubDate>Tue, 15 Sep 2020 20:51:10 +1000</pubDate>
-                </item>""".trimIndent()).item(0), DateTimeFormatter.RFC_1123_DATE_TIME)
-            val i2 = Item(get("""<item>
-                <guid>00000</guid><title>t2</title><link>https://news.org/2</link><description>d2</description>
-                <pubDate>Tue, 15 Sep 2020 20:51:10 +1000</pubDate>
-                </item>""".trimIndent()).item(0), DateTimeFormatter.RFC_1123_DATE_TIME)
+            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "11111" }, DateTimeFormatter.RFC_1123_DATE_TIME)
+            val i2 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "00000" }, DateTimeFormatter.RFC_1123_DATE_TIME)
 
             val list = listOf(i1, i2)
             val sorted = list.sorted()
