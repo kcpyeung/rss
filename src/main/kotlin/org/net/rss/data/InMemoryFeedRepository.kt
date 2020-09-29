@@ -2,7 +2,7 @@ package org.net.rss.data
 
 import org.net.rss.Rss
 
-class InMemoryFeedRepository {
+object InMemoryFeedRepository {
     private val feeds = hashMapOf<String, Rss>()
 
     fun add(source: String, rss: Rss) {
@@ -20,5 +20,9 @@ class InMemoryFeedRepository {
 
     fun get(source: String): Rss? {
         return feeds[source]
+    }
+
+    internal fun clear() {
+        feeds.clear()
     }
 }

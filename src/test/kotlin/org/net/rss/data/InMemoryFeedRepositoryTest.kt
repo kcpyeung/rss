@@ -2,6 +2,7 @@ package org.net.rss.data
 
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
 import java.time.format.DateTimeFormatter
@@ -78,34 +79,34 @@ class InMemoryFeedRepositoryTest {
 </rss>
 """.trimIndent()
 
+    @BeforeEach
+    fun emptyRepo() { InMemoryFeedRepository.clear() }
+
     @Test
     fun `emtpy repo stores all items`() {
         val rss = Rss(rss1, dateFormat)
-        val repo = InMemoryFeedRepository()
 
-        repo.add("https://somenews.com", rss)
+        InMemoryFeedRepository.add("https://somenews.com", rss)
 
-        assertThat(repo.hasSource("https://somenews.com"), `is`(true))
-        assertThat(repo.get("https://somenews.com")?.items?.size, `is`(2))
+        assertThat(InMemoryFeedRepository.hasSource("https://somenews.com"), `is`(true))
+        assertThat(InMemoryFeedRepository.get("https://somenews.com")?.items?.size, `is`(2))
     }
 
     @Test
     fun `adding new items to existing feed appends if no overlap`() {
-        val repo = InMemoryFeedRepository()
-        repo.add("https://somenews.com", Rss(rss1, dateFormat))
+        InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, dateFormat))
 
-        repo.add("https://somenews.com", Rss(rss2WithNoOverlap, dateFormat))
+        InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithNoOverlap, dateFormat))
 
-        assertThat(repo.get("https://somenews.com")?.items?.size, `is`(4))
+        assertThat(InMemoryFeedRepository.get("https://somenews.com")?.items?.size, `is`(4))
     }
 
     @Test
     fun `filters off overlap and adds new items to existing feed`() {
-        val repo = InMemoryFeedRepository()
-        repo.add("https://somenews.com", Rss(rss1, dateFormat))
+        InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, dateFormat))
 
-        repo.add("https://somenews.com", Rss(rss2WithOverlap, dateFormat))
-        val items = repo.get("https://somenews.com")?.items
+        InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithOverlap, dateFormat))
+        val items = InMemoryFeedRepository.get("https://somenews.com")?.items
 
         assertThat(items?.size, `is`(3))
         assertThat(items?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
