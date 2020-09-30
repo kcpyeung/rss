@@ -16,7 +16,7 @@ class Reader {
           .filterNotNull()
           .map { FeedDiv(it) }
           .map { it.toString() }
-          .joinToString { it }
+          .joinToString(separator = "") { it }
 
         return "<html><body>${divs}</body></html>"
     }
