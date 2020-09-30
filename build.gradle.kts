@@ -1,5 +1,18 @@
 plugins {
     kotlin("jvm") version "1.4.10"
+    application
+}
+
+application {
+    mainClass.set("org.net.rss.ReaderKt")
+}
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "org.net.rss.ReaderKt"
+    }
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
+    }
 }
 
 repositories {

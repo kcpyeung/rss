@@ -10,7 +10,5 @@ class Poller {
 
         Subscriptions.all
           .forEach { InMemoryFeedRepository.add(it.url, fetcher.fetch(it)) }
-
-        val a = 1
     }
 }
