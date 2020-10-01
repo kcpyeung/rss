@@ -5,7 +5,7 @@ import org.net.rss.Item
 class ItemDiv(index: Int, private val item: Item, feedDiv: FeedDiv) {
     private val id = feedDiv.id + "-" + index
 
-    override fun toString(): String {
+    fun asHtml(): String {
         val buffer = StringBuffer(1024)
 
         buffer.append("<div id=\"${id}\">").append("\n")
