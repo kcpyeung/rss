@@ -3,11 +3,6 @@ package org.net.rss
 import org.net.rss.data.InMemoryFeedRepository
 import org.net.rss.html.FeedDiv
 
-fun main(args: Array<String>) {
-    Poller().poll()
-    println(Reader().show())
-}
-
 class Reader {
     fun show(): String {
         val divs = Subscriptions

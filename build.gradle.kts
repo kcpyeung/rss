@@ -4,11 +4,11 @@ plugins {
 }
 
 application {
-    mainClass.set("org.net.rss.ReaderKt")
+    mainClass.set("org.net.rss.ServerKt")
 }
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "org.net.rss.ReaderKt"
+        attributes["Main-Class"] = "org.net.rss.ServerKt"
     }
     configurations["compileClasspath"].forEach { file: File ->
         from(zipTree(file.absoluteFile))
@@ -20,6 +20,9 @@ repositories {
 }
 
 dependencies {
+    implementation("org.http4k:http4k-core:3.262.0")
+    implementation("org.http4k:http4k-server-netty:3.262.0")
+    implementation("org.http4k:http4k-client-apache:3.262.0")
     testImplementation("io.mockk:mockk:1.10.0")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
