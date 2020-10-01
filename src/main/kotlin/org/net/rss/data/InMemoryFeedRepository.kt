@@ -1,9 +1,10 @@
 package org.net.rss.data
 
 import org.net.rss.Rss
+import java.util.Collections
 
 object InMemoryFeedRepository {
-    private val feeds = hashMapOf<String, Rss>()
+    private val feeds = Collections.synchronizedMap(hashMapOf<String, Rss>())
 
     fun add(source: String, rss: Rss) {
         val stored = feeds[source]

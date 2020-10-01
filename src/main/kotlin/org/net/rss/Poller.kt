@@ -9,6 +9,8 @@ class Poller {
         val fetcher = Fetcher(HttpClient.newHttpClient())
 
         Subscriptions.all
-          .forEach { InMemoryFeedRepository.add(it.url, fetcher.fetch(it)) }
+          .parallelStream()
+          .map { Pair(it.url, fetcher.fetch(it)) }
+          .forEach { InMemoryFeedRepository.add(it.first, it.second) }
     }
 }
