@@ -35,7 +35,6 @@ val app: HttpHandler = { _ ->
 private fun feedDivs(): List<FeedDiv> {
     return Subscriptions
       .all
-      .map { InMemoryFeedRepository.get(it.url) }
-      .filterNotNull()
+      .mapNotNull { InMemoryFeedRepository.get(it.url) }
       .map { FeedDiv(it) }
 }
