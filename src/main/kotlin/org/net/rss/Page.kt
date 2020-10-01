@@ -17,7 +17,19 @@ class Page(private val feedDivs: List<FeedDiv>) {
     }
 
     fun asHtml(): String {
-        return "<html><body>${toc()}$divs</body></html>"
+        return "<html><head><style>${style()}</style></head><body>${toc()}$divs</body></html>"
+    }
+
+    private fun style(): String {
+        return """
+            .odd {
+                background: #ffb6c1
+            }
+            
+            .even {
+                background: #add8e6
+            }
+        """.trimIndent()
     }
 
     private fun join(stuff: List<String>): String {
