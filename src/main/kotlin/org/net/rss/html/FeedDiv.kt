@@ -10,6 +10,7 @@ class FeedDiv(rss: Rss) {
     fun asHtml(): String {
         val buffer = StringBuilder(1024)
         buffer.append(start())
+        buffer.append(title())
         for (child in children) {
             buffer.append(child.asHtml())
         }
@@ -18,8 +19,12 @@ class FeedDiv(rss: Rss) {
         return buffer.toString()
     }
 
+    private fun title(): String {
+        return "<div class=\"feed_title\">${title}</div>\n"
+    }
+
     private fun start(): String {
-        return "<div id=\"${id}\">${title}\n"
+        return "<div id=\"${id}\">\n"
     }
 
     private fun end(): String {

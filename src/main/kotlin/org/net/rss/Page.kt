@@ -29,6 +29,11 @@ class Page(private val feedDivs: List<FeedDiv>) {
             .even {
                 background: #add8e6
             }
+            
+            .feed_title {
+                font-weight: 700;
+                font-size: 25;
+            }
         """.trimIndent()
     }
 

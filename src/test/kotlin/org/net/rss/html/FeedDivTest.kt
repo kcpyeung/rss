@@ -56,21 +56,12 @@ class FeedDivTest {
         }
 
         @Test
-        fun feed_div_contains_feed_title() {
-            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
-
-            val toString = div.asHtml()
-
-            assertThat(toString, startsWith("""<div id="victoria_articles_feed">Victoria articles feed"""))
-            assertThat(toString, endsWith("</div>"))
-        }
-
-        @Test
         fun `full feed html`() {
             val div = FeedDiv(Rss(rssWith2Items, dateFormat))
 
             assertThat(div.asHtml(), `is`("""
-                <div id="victoria_articles_feed">Victoria articles feed
+                <div id="victoria_articles_feed">
+                <div class="feed_title">Victoria articles feed</div>
                 <div class="even" id="victoria_articles_feed-0">
                     <div><a href="https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386">Footage of a man being arrested by police in Melbourne's north.</a></div>
                     <div>Footage of the man's arrest showed him running from police and striking a police car, before he was hit by a police car.</div>
