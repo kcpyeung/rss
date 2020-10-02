@@ -65,13 +65,13 @@ class FeedDivTest {
                 <div class="even" id="victoria_articles_feed-0">
                     <div><a href="https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386">Footage of a man being arrested by police in Melbourne's north.</a></div>
                     <div>Footage of the man's arrest showed him running from police and striking a police car, before he was hit by a police car.</div>
-                    <div>Published at 2020-09-14T20:51:10+10:00</div>
+                    <div>Published at Mon, 14 Sep 2020 20:51:10 +1000</div>
                     <div><p/></div>
                 </div>
                 <div class="odd" id="victoria_articles_feed-1">
                     <div><a href="https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598">How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community</a></div>
                     <div><p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p></div>
-                    <div>Published at 2020-09-27T17:30+10:00</div>
+                    <div>Published at Sun, 27 Sep 2020 17:30:00 +1000</div>
                     <div><p/></div>
                 </div>
                 </div>

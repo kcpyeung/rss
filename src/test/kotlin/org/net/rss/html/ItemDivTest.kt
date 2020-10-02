@@ -6,6 +6,7 @@ import org.hamcrest.CoreMatchers.startsWith
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.net.rss.Item
+import java.time.ZonedDateTime
 
 class ItemDivTest {
     @Test
@@ -23,7 +24,10 @@ class ItemDivTest {
     }
 
     private fun item(): Item {
-        return mockk<Item>(relaxed = true)
+        val item = mockk<Item>(relaxed = true)
+        every { item.pubDate } returns ZonedDateTime.now()
+
+        return item
     }
 
     private fun feedDiv(): FeedDiv {
