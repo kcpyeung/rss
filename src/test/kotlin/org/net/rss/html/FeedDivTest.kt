@@ -1,14 +1,15 @@
 package org.net.rss.html
 
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
+import org.net.rss.Subscription
 import java.time.format.DateTimeFormatter
 
 class FeedDivTest {
-    val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
+    val subscription = Subscription("https://www.theguardian.com/au/rss", DateTimeFormatter.RFC_1123_DATE_TIME)
 
     val rssWith2Items = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -40,24 +41,25 @@ class FeedDivTest {
 </rss>
 """.trimIndent()
 
-    @Nested inner class FeedRelatedTests {
+    @Nested
+    inner class FeedRelatedTests {
         @Test
         fun div_id_is_feed_title() {
-            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
+            val div = FeedDiv(Rss(rssWith2Items, subscription))
 
             assertThat(div.id, `is`("victoria_articles_feed"))
         }
 
         @Test
         fun feed_div_has_title_plus_items() {
-            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
+            val div = FeedDiv(Rss(rssWith2Items, subscription))
 
             assertThat(div.items.size, `is`(2))
         }
 
         @Test
         fun `full feed html`() {
-            val div = FeedDiv(Rss(rssWith2Items, dateFormat))
+            val div = FeedDiv(Rss(rssWith2Items, subscription))
 
             assertThat(div.asHtml(), `is`("""
                 |<div id="victoria_articles_feed">

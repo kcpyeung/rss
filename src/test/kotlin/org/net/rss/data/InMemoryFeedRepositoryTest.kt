@@ -5,10 +5,11 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
+import org.net.rss.Subscription
 import java.time.format.DateTimeFormatter
 
 class InMemoryFeedRepositoryTest {
-    val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
+    val subscription = Subscription("https://www.theguardian.com/au/rss", DateTimeFormatter.RFC_1123_DATE_TIME)
 
     private val rss1 = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -80,11 +81,13 @@ class InMemoryFeedRepositoryTest {
 """.trimIndent()
 
     @BeforeEach
-    fun emptyRepo() { InMemoryFeedRepository.clear() }
+    fun emptyRepo() {
+        InMemoryFeedRepository.clear()
+    }
 
     @Test
     fun `emtpy repo stores all items`() {
-        val rss = Rss(rss1, dateFormat)
+        val rss = Rss(rss1, subscription)
 
         InMemoryFeedRepository.add("https://somenews.com", rss)
 
@@ -94,18 +97,18 @@ class InMemoryFeedRepositoryTest {
 
     @Test
     fun `adding new items to existing feed appends if no overlap`() {
-        InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, dateFormat))
+        InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, subscription))
 
-        InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithNoOverlap, dateFormat))
+        InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithNoOverlap, subscription))
 
         assertThat(InMemoryFeedRepository.get("https://somenews.com")?.items?.size, `is`(4))
     }
 
     @Test
     fun `filters off overlap and adds new items to existing feed`() {
-        InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, dateFormat))
+        InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, subscription))
 
-        InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithOverlap, dateFormat))
+        InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithOverlap, subscription))
         val items = InMemoryFeedRepository.get("https://somenews.com")?.items
 
         assertThat(items?.size, `is`(3))

@@ -1,10 +1,9 @@
 package org.net.rss
 
 import org.net.rss.xml.XmlHelper
-import java.time.format.DateTimeFormatter
-import java.util.Collections
+import java.util.*
 
-class Rss(rss: String, dateFormat: DateTimeFormatter) {
+class Rss(rss: String, subscription: Subscription) {
     val category: String?
     val title: String?
     var items: List<Item>
@@ -16,7 +15,7 @@ class Rss(rss: String, dateFormat: DateTimeFormatter) {
         title = xmlHelper.getAsString("/rss/channel/title")
         items = xmlHelper
           .getLookups("/rss/channel/item")
-          .map { Item(it, dateFormat) }
+          .map { Item(it, subscription.dateFormat) }
           .sorted()
     }
 

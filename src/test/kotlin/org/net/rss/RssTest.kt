@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import java.time.format.DateTimeFormatter
 
 class RssTest {
-    val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
+    val subscription = Subscription("https://www.theguardian.com/au/rss", DateTimeFormatter.RFC_1123_DATE_TIME)
 
     val rss = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -30,11 +30,13 @@ class RssTest {
 </rss>
 """.trimIndent()
 
-    @Test fun rss_has_category() {
-        assertThat(Rss(rss, dateFormat).category, `is`("Australian Broadcasting Corporation: All content"))
+    @Test
+    fun rss_has_category() {
+        assertThat(Rss(rss, subscription).category, `is`("Australian Broadcasting Corporation: All content"))
     }
 
-    @Test fun rss_has_title() {
-        assertThat(Rss(rss, dateFormat).title, `is`("Victoria articles feed"))
+    @Test
+    fun rss_has_title() {
+        assertThat(Rss(rss, subscription).title, `is`("Victoria articles feed"))
     }
 }

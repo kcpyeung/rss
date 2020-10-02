@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Base64
 
-class Item(getAsString: (String) -> String?, dateFormat: DateTimeFormatter, linkRewrite: (String) -> String? = { it }) : Comparable<Item> {
+class Item(getAsString: (String) -> String?, dateFormat: DateTimeFormatter, linkRewrite: (String) -> String = { it }) : Comparable<Item> {
     val title = getAsString("title")
     val link = if (getAsString("link") != null) linkRewrite(getAsString("link")!!) else null
     val description = getAsString("description")

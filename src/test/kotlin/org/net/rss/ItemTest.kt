@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ItemTest {
-    val dateFormat = DateTimeFormatter.RFC_1123_DATE_TIME
+    val subscription = Subscription("https://www.theguardian.com/au/rss", DateTimeFormatter.RFC_1123_DATE_TIME)
 
     val rss = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -69,7 +69,7 @@ class ItemTest {
 
     @Test
     fun item_has_basic_properties() {
-        val item = Rss(rss, dateFormat).items[0]
+        val item = Rss(rss, subscription).items[0]
 
         assertThat(item.description, `is`("<p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p>"))
         assertThat(item.link, `is`("https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598"))
@@ -78,7 +78,7 @@ class ItemTest {
 
     @Test
     fun all_items_available() {
-        val rss = Rss(rssWith2Items, dateFormat)
+        val rss = Rss(rssWith2Items, subscription)
 
         assertThat(rss.items[0].description, `is`("Footage of the man's arrest showed him running from police and striking a police car, before he was hit by a police car."))
         assertThat(rss.items[0].link, `is`("https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386"))
@@ -95,7 +95,7 @@ class ItemTest {
         mockkStatic("java.time.ZonedDateTime")
         every { ZonedDateTime.now() } returns ZonedDateTime.now(clock)
 
-        val rss = Rss(rssWith2Items, dateFormat)
+        val rss = Rss(rssWith2Items, subscription)
 
         assertThat(rss.items[0].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-14T10:51:10Z"), ZoneId.of("+10:00"))))
         assertThat(rss.items[1].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("+10:00"))))
@@ -108,7 +108,7 @@ class ItemTest {
             Base64.getEncoder().encodeToString(any())
         } returns "kICr1LONJhcb6BKHyiM7BIzCFrU="
 
-        val rss = Rss(rssWith2Items, dateFormat)
+        val rss = Rss(rssWith2Items, subscription)
 
         assertThat(rss.items[0].guid, `is`("F44F0AAA-78ED-4374-9F93-AFF05829E218"))
         assertThat(rss.items[1].guid, `is`("kICr1LONJhcb6BKHyiM7BIzCFrU="))

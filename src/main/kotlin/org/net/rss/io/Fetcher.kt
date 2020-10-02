@@ -12,7 +12,7 @@ class Fetcher(private val http: HttpClient) {
         val request = toRequest(subscription.url)
 
         val xml = http.send(request, HttpResponse.BodyHandlers.ofString()).body()
-        return Rss(xml, subscription.dateFormat)
+        return Rss(xml, subscription)
     }
 
     private fun toRequest(url: String): HttpRequest {
