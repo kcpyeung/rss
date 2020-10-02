@@ -38,6 +38,14 @@ class Page(private val feedDivs: List<FeedDiv>) {
             .title_link {
                 font-weight: 700;
             }
+            
+            .actions {
+                width: 30%
+            }
+
+            .content {
+                width: 70%
+            }
         """.trimIndent()
     }
 
