@@ -12,10 +12,15 @@ class ItemDiv(index: Int, private val item: Item, feedDiv: FeedDiv) {
     fun asHtml(): String {
         return """
             <div class="${clazz}" id="${id}">
+                <table><tbody><tr>
+                <td>***</td>
+                <td>
                 <div class="title_link"><a href="${item.link}">${item.title}</a></div>
                 <div>${item.description}</div>
                 <div>Published at ${df.format(item.pubDate)}</div>
                 <div><p/></div>
+                </td>
+                </tr></tbody></table>
             </div>
             
         """.trimIndent()
