@@ -118,8 +118,8 @@ class ItemTest {
     inner class Sorting {
         @Test
         fun `sort items by pubDate ascendingly if different`() {
-            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "later" }, DateTimeFormatter.RFC_1123_DATE_TIME)
-            val i2 = Item({ if (it == "pubDate") "Mon, 14 Sep 2020 20:51:10 +1000" else "earlier" }, DateTimeFormatter.RFC_1123_DATE_TIME)
+            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "later" }, subscription)
+            val i2 = Item({ if (it == "pubDate") "Mon, 14 Sep 2020 20:51:10 +1000" else "earlier" }, subscription)
 
             val list = listOf(i1, i2)
             val sorted = list.sorted()
@@ -130,8 +130,8 @@ class ItemTest {
 
         @Test
         fun `sort items by guid ascendingly if pubDate identical`() {
-            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "11111" }, DateTimeFormatter.RFC_1123_DATE_TIME)
-            val i2 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "00000" }, DateTimeFormatter.RFC_1123_DATE_TIME)
+            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "11111" }, subscription)
+            val i2 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "00000" }, subscription)
 
             val list = listOf(i1, i2)
             val sorted = list.sorted()
@@ -145,14 +145,15 @@ class ItemTest {
     inner class LinkRewrite {
         @Test
         fun `if not specified, no link rewrite happens`() {
-            val item = Item({ if (it == "link") "https://some.com/real_news.html" else null }, DateTimeFormatter.RFC_1123_DATE_TIME)
+            val item = Item({ if (it == "link") "https://some.com/real_news.html" else null }, subscription)
 
             assertThat(item.link, `is`("https://some.com/real_news.html"))
         }
 
         @Test
         fun `if specified, link rewrite lambda is invoked to rewrite the link`() {
-            val item = Item({ if (it == "link") "https://some.com/real_news.html" else null }, DateTimeFormatter.RFC_1123_DATE_TIME, linkRewrite = { it.replace("real", "FAKE") })
+            val subscription = Subscription("https://some.com/real_news.html", DateTimeFormatter.RFC_1123_DATE_TIME, { it.replace("real", "FAKE") })
+            val item = Item({ if (it == "link") "https://some.com/real_news.html" else null }, subscription)
 
             assertThat(item.link, `is`("https://some.com/FAKE_news.html"))
         }

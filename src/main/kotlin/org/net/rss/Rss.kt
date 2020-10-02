@@ -15,7 +15,7 @@ class Rss(rss: String, subscription: Subscription) {
         title = xmlHelper.getAsString("/rss/channel/title")
         items = xmlHelper
           .getLookups("/rss/channel/item")
-          .map { Item(it, subscription.dateFormat, subscription.linkRewrite) }
+          .map { Item(it, subscription) }
           .sorted()
     }
 
