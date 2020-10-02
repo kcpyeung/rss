@@ -140,4 +140,21 @@ class ItemTest {
             assertThat(sorted.get(1).guid, `is`("11111"))
         }
     }
+
+    @Nested
+    inner class LinkRewrite {
+        @Test
+        fun `if not specified, no link rewrite happens`() {
+            val item = Item({ if (it == "link") "https://some.com/real_news.html" else null }, DateTimeFormatter.RFC_1123_DATE_TIME)
+
+            assertThat(item.link, `is`("https://some.com/real_news.html"))
+        }
+
+        @Test
+        fun `if specified, link rewrite lambda is invoked to rewrite the link`() {
+            val item = Item({ if (it == "link") "https://some.com/real_news.html" else null }, DateTimeFormatter.RFC_1123_DATE_TIME, linkRewrite = { it.replace("real", "FAKE") })
+
+            assertThat(item.link, `is`("https://some.com/FAKE_news.html"))
+        }
+    }
 }

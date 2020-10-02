@@ -5,9 +5,9 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Base64
 
-class Item(getAsString: (String) -> String?, dateFormat: DateTimeFormatter) : Comparable<Item> {
+class Item(getAsString: (String) -> String?, dateFormat: DateTimeFormatter, linkRewrite: (String) -> String? = { it }) : Comparable<Item> {
     val title = getAsString("title")
-    val link = getAsString("link")
+    val link = if (getAsString("link") != null) linkRewrite(getAsString("link")!!) else null
     val description = getAsString("description")
     val pubDate = if (getAsString("pubDate") == null) ZonedDateTime.now() else ZonedDateTime.parse(getAsString("pubDate"), dateFormat)
     val guid = getAsString("guid") ?: sha1()
