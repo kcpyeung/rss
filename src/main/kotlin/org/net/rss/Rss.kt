@@ -6,30 +6,35 @@ import java.util.*
 class Rss(rss: String, subscription: Subscription) {
     val category: String?
     val title: String?
-    var items: List<Item>
+    lateinit var items: List<Item>
 
     init {
         val xmlHelper = XmlHelper(rss)
 
         category = xmlHelper.getAsString("/rss/channel/category")
         title = xmlHelper.getAsString("/rss/channel/title")
-        items = xmlHelper
+        safeCopy(xmlHelper
           .getLookups("/rss/channel/item")
-          .map { Item(it, subscription) }
-          .sorted()
+          .map { Item(it, subscription) })
     }
 
     fun addItems(newItems: List<Item>) {
         val currentItems = this.items.toMutableSet()
         currentItems += newItems
-        this.items = Collections.unmodifiableList(currentItems.toList().sorted())
+
+        safeCopy(currentItems.toList())
     }
 
     fun deleteTo(guid: String) {
-        val found = items.find { it.guid == guid } ?: return
+        val whereIsIt = items.indexOfFirst { it.guid == guid }
+        if (whereIsIt == -1) return
 
-        val itemCopy = items.toMutableList()
-        val whereIsIt = itemCopy.indexOf(found)
-        this.items = Collections.unmodifiableList(itemCopy.subList(whereIsIt + 1, itemCopy.size))
+        safeCopy(items.subList(whereIsIt + 1, items.size))
+    }
+
+    private fun safeCopy(items: List<Item>) {
+        synchronized(this) {
+            this.items = Collections.unmodifiableList(items.sorted())
+        }
     }
 }
