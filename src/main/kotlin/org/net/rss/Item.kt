@@ -1,22 +1,14 @@
 package org.net.rss
 
-import java.security.MessageDigest
+import org.net.rss.util.Id
 import java.time.ZonedDateTime
-import java.util.*
 
 class Item(getAsString: (String) -> String?, subscription: Subscription) : Comparable<Item> {
     val title = getAsString("title")
     val link = if (getAsString("link") != null) subscription.linkRewrite(getAsString("link")!!) else null
     val description = getAsString("description")
     val pubDate = if (getAsString("pubDate") == null) ZonedDateTime.now() else ZonedDateTime.parse(getAsString("pubDate"), subscription.dateFormat)
-    val guid = getAsString("guid") ?: sha1()
-
-    private fun sha1(): String {
-        val input = "${title}:${link}:${description}:${pubDate}"
-        val digest = MessageDigest.getInstance("SHA-1").digest(input.toByteArray())
-
-        return Base64.getEncoder().encodeToString(digest)
-    }
+    val guid = getAsString("guid") ?: Id("${title}:${link}:${description}:${pubDate}").hash
 
     override fun compareTo(other: Item): Int {
         val dateComparison = this.pubDate.compareTo(other.pubDate)

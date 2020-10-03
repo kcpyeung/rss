@@ -1,9 +1,11 @@
 package org.net.rss
 
+import org.net.rss.util.Id
 import org.net.rss.xml.XmlHelper
 import java.util.*
 
 class Rss(rss: String, subscription: Subscription) {
+    val id = Id(subscription.url).hash
     val category: String?
     val title: String?
     lateinit var items: List<Item>

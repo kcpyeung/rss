@@ -39,4 +39,9 @@ class RssTest {
     fun rss_has_title() {
         assertThat(Rss(rss, subscription).title, `is`("Victoria articles feed"))
     }
+
+    @Test
+    fun `rss id is base64-sha1 of its subscription url`() {
+        assertThat(Rss(rss, subscription).id, `is`("ecQtfX6DhlbdNxbGorU4CBvRunw="))
+    }
 }
