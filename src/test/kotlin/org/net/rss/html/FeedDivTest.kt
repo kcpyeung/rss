@@ -83,6 +83,7 @@ class FeedDivTest {
                 |    <table><tbody><tr>
                 |    <td class="actions">
                 |    <div><a href="#toc">Back to top</a></div>
+                |    <div><a href="/read/ecQtfX6DhlbdNxbGorU4CBvRunw=/S703KZLSnJyg9pgrpB8toGqhEQg=">Mark read to here</a></div>
                 |    </td>
                 |    <td class="content">
                 |    <div class="title_link"><a href="https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386" target="S703KZLSnJyg9pgrpB8toGqhEQg=">Footage of a man being arrested by police in Melbourne's north.</a></div>
@@ -96,6 +97,7 @@ class FeedDivTest {
                 |    <table><tbody><tr>
                 |    <td class="actions">
                 |    <div><a href="#toc">Back to top</a></div>
+                |    <div><a href="/read/ecQtfX6DhlbdNxbGorU4CBvRunw=/qdmNgHhyl9deZuRho6wd8lssaDQ=">Mark read to here</a></div>
                 |    </td>
                 |    <td class="content">
                 |    <div class="title_link"><a href="https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598" target="qdmNgHhyl9deZuRho6wd8lssaDQ=">How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community</a></div>

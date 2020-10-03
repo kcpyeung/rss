@@ -31,7 +31,7 @@ class ItemDivTest {
     }
 
     private fun feedDiv(): FeedDiv {
-        val div = mockk<FeedDiv>()
+        val div = mockk<FeedDiv>(relaxed = true)
         every { div.id } returns "helloworld"
 
         return div

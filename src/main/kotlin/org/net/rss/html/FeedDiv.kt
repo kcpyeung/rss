@@ -3,6 +3,7 @@ package org.net.rss.html
 import org.net.rss.Rss
 
 class FeedDiv(rss: Rss) {
+    val hash = rss.id
     val title = rss.title
     val id = title?.toLowerCase()?.replace(" ", "_")
     val items = rss.items.mapIndexed { index, item -> ItemDiv(index, item, this) }
