@@ -1,6 +1,7 @@
 package org.net.rss
 
 import org.net.rss.xml.XmlHelper
+import java.time.ZonedDateTime
 import java.util.*
 
 class Rss(rss: String, subscription: Subscription) {
@@ -19,16 +20,15 @@ class Rss(rss: String, subscription: Subscription) {
           .map { Item(it, subscription) })
     }
 
-    fun addItems(newItems: List<Item>) {
+    fun addItems(newItems: List<Item>, lastRefreshedAt: ZonedDateTime) {
+        val newItemsToAdd = newItems.filter { it.pubDate >= lastRefreshedAt }
         if (this.items.isNotEmpty()) {
             val currentItems = this.items.toMutableSet()
-            val lastOfCurrentItems = currentItems.last()
-
-            currentItems += newItems.filter { it.pubDate >= lastOfCurrentItems.pubDate }
+            currentItems += newItemsToAdd
 
             safeCopy(currentItems.toList())
         } else {
-            safeCopy(newItems)
+            safeCopy(newItemsToAdd)
         }
     }
 
