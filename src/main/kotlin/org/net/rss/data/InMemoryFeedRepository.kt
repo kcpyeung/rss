@@ -6,10 +6,10 @@ import java.util.*
 object InMemoryFeedRepository {
     private val feeds = Collections.synchronizedMap(hashMapOf<String, Rss>())
 
-    fun add(source: String, rss: Rss) {
-        val stored = feeds[source]
+    fun add(rss: Rss) {
+        val stored = feeds[rss.id]
         if (stored == null) {
-            feeds[source] = rss
+            feeds[rss.id] = rss
         } else {
             stored.addItems(rss.items)
         }

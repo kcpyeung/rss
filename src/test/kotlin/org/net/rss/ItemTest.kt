@@ -115,8 +115,8 @@ class ItemTest {
 
     @Nested
     inner class Sorting {
-        private val sub0 = Subscription("https://some.site", DateTimeFormatter.RFC_1123_DATE_TIME, idGenerator = { _ -> "00000"})
-        private val sub1 = Subscription("https://some.site", DateTimeFormatter.RFC_1123_DATE_TIME, idGenerator = { _ -> "11111"})
+        private val sub0 = Subscription("https://some.site", itemIdGen = { _ -> "00000"})
+        private val sub1 = Subscription("https://some.site", itemIdGen = { _ -> "11111"})
 
         @Test
         fun `sort items by pubDate ascendingly if different`() {

@@ -7,10 +7,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
 import org.net.rss.Subscription
-import java.time.format.DateTimeFormatter
 
 class InMemoryFeedRepositoryTest {
-    val subscription = Subscription("https://www.theguardian.com/au/rss", DateTimeFormatter.RFC_1123_DATE_TIME)
+    val subscription = Subscription("https://www.theguardian.com/au/rss", feedIdGen = { _ -> "id" })
 
     private val rss1 = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -96,27 +95,27 @@ class InMemoryFeedRepositoryTest {
     fun `empty repo stores all items`() {
         val rss = Rss(rss1, subscription)
 
-        InMemoryFeedRepository.add("https://somenews.com", rss)
+        InMemoryFeedRepository.add(rss)
 
-        assertThat(InMemoryFeedRepository.hasSource("https://somenews.com"), `is`(true))
-        assertThat(InMemoryFeedRepository.get("https://somenews.com")?.items?.size, `is`(2))
+        assertThat(InMemoryFeedRepository.hasSource("id"), `is`(true))
+        assertThat(InMemoryFeedRepository.get("id")?.items?.size, `is`(2))
     }
 
     @Test
     fun `adding new items to existing feed appends if no overlap`() {
-        InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, subscription))
+        InMemoryFeedRepository.add(Rss(rss1, subscription))
 
-        InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithNoOverlap, subscription))
+        InMemoryFeedRepository.add(Rss(rss2WithNoOverlap, subscription))
 
-        assertThat(InMemoryFeedRepository.get("https://somenews.com")?.items?.size, `is`(4))
+        assertThat(InMemoryFeedRepository.get("id")?.items?.size, `is`(4))
     }
 
     @Test
     fun `filters off overlap and adds new items to existing feed`() {
-        InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, subscription))
+        InMemoryFeedRepository.add(Rss(rss1, subscription))
 
-        InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithOverlap, subscription))
-        val items = InMemoryFeedRepository.get("https://somenews.com")?.items
+        InMemoryFeedRepository.add(Rss(rss2WithOverlap, subscription))
+        val items = InMemoryFeedRepository.get("id")?.items
 
         assertThat(items?.size, `is`(3))
         assertThat(items?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
@@ -126,30 +125,30 @@ class InMemoryFeedRepositoryTest {
     inner class Delete {
         @BeforeEach
         private fun populate() {
-            InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, subscription))
-            InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithOverlap, subscription))
+            InMemoryFeedRepository.add(Rss(rss1, subscription))
+            InMemoryFeedRepository.add(Rss(rss2WithOverlap, subscription))
         }
 
         @Test
         fun `deleting a nonexistent item has no effect`() {
-            val beforeDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
+            val beforeDelete = InMemoryFeedRepository.get("id")?.items
             assertThat(beforeDelete?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
 
-            InMemoryFeedRepository.deleteTo("https://somenews.com", "abcde")
+            InMemoryFeedRepository.deleteTo("id", "abcde")
 
-            val afterDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
+            val afterDelete = InMemoryFeedRepository.get("id")?.items
             assertThat(afterDelete?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
         }
 
         @Test
         fun `deleting items before and up to guid by time`() {
-            val beforeDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
+            val beforeDelete = InMemoryFeedRepository.get("id")?.items
             assertThat(beforeDelete?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
 
             val deleteToItem = beforeDelete?.get(1)
-            InMemoryFeedRepository.deleteTo("https://somenews.com", deleteToItem!!.guid)
+            InMemoryFeedRepository.deleteTo("id", deleteToItem!!.guid)
 
-            val afterDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
+            val afterDelete = InMemoryFeedRepository.get("id")?.items
             assertThat(afterDelete?.map { it.title }, `is`(listOf("Title 4")))
         }
     }

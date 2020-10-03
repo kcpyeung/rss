@@ -4,7 +4,7 @@ import org.net.rss.xml.XmlHelper
 import java.util.*
 
 class Rss(rss: String, subscription: Subscription) {
-    val id = subscription.idGenerator(subscription.url)
+    val id = subscription.feedIdGen(subscription.url)
     val category: String?
     val title: String?
     lateinit var items: List<Item>

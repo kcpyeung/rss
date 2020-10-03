@@ -10,7 +10,7 @@ class Poller {
 
         Subscriptions.all
           .parallelStream()
-          .map { Pair(it.url, fetcher.fetch(it)) }
-          .forEach { InMemoryFeedRepository.add(it.first, it.second) }
+          .map { fetcher.fetch(it) }
+          .forEach { InMemoryFeedRepository.add(it) }
     }
 }
