@@ -86,6 +86,45 @@ class InMemoryFeedRepositoryTest {
 </rss>
 """.trimIndent()
 
+    private val rss1Updated = """
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Victoria articles feed</title>
+    <category>Australian Broadcasting Corporation: All content</category>
+    <item>
+        <guid>guid1</guid>
+        <title>Title 1</title>
+        <link>https://somenews.com/1</link>
+        <description>description 1</description>
+        <pubDate>Mon, 14 Sep 2020 20:50:00 +1000</pubDate>
+    </item>
+    <item>
+        <guid>guid2</guid>
+        <title>Title 2</title>
+        <link>https://somenews.com/2</link>
+        <description>description 2</description>
+        <pubDate>Mon, 14 Sep 2020 20:51:10 +1000</pubDate>
+    </item>
+    <item>
+        <guid>guid3</guid>
+        <title>Title 3</title>
+        <link>https://somenews.com/3</link>
+        <description>description 3</description>
+        <pubDate>Mon, 14 Sep 2020 20:52:10 +1000</pubDate>
+    </item>
+    <item>
+        <guid>guid4</guid>
+        <title>Title 4</title>
+        <link>https://somenews.com/4</link>
+        <description>description 4</description>
+        <pubDate>Mon, 14 Sep 2020 20:53:10 +1000</pubDate>
+    </item>
+  </channel>
+</rss>
+""".trimIndent()
+
     @BeforeEach
     fun emptyRepo() {
         InMemoryFeedRepository.clear()
@@ -119,6 +158,21 @@ class InMemoryFeedRepositoryTest {
 
         assertThat(items?.size, `is`(3))
         assertThat(items?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
+    }
+
+    @Test
+    fun `deleted items will not be added back at subsequent refreshes`() {
+        val rss = Rss(rss1, subscription)
+        InMemoryFeedRepository.add(rss)
+        InMemoryFeedRepository.deleteTo("id", rss.items[0].guid)
+        val afterDelete = InMemoryFeedRepository.get("id")?.items?.map { it.title }
+        assertThat(afterDelete, `is`(listOf("Title 2")))
+
+        val rssAtNextRefresh = Rss(rss1Updated, subscription)
+        InMemoryFeedRepository.add(rssAtNextRefresh)
+
+        val afterRefresh = InMemoryFeedRepository.get("id")?.items?.map { it.title }
+        assertThat(afterRefresh, `is`(listOf("Title 2", "Title 3", "Title 4")))
     }
 
     @Nested

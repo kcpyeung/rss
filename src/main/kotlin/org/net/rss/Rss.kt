@@ -20,10 +20,16 @@ class Rss(rss: String, subscription: Subscription) {
     }
 
     fun addItems(newItems: List<Item>) {
-        val currentItems = this.items.toMutableSet()
-        currentItems += newItems
+        if (this.items.isNotEmpty()) {
+            val currentItems = this.items.toMutableSet()
+            val lastOfCurrentItems = currentItems.last()
 
-        safeCopy(currentItems.toList())
+            currentItems += newItems.filter { it.pubDate >= lastOfCurrentItems.pubDate }
+
+            safeCopy(currentItems.toList())
+        } else {
+            safeCopy(newItems)
+        }
     }
 
     fun deleteTo(guid: String) {
