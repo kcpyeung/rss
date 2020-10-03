@@ -9,6 +9,6 @@ class Id(id: String) {
     private fun sha1(url: String): String {
         val digest = MessageDigest.getInstance("SHA-1").digest(url.toByteArray())
 
-        return Base64.getEncoder().encodeToString(digest)
+        return Base64.getUrlEncoder().encodeToString(digest)
     }
 }

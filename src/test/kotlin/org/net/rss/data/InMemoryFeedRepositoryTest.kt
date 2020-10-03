@@ -146,7 +146,8 @@ class InMemoryFeedRepositoryTest {
             val beforeDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
             assertThat(beforeDelete?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
 
-            InMemoryFeedRepository.deleteTo("https://somenews.com", "guid2")
+            val deleteToItem = beforeDelete?.get(1)
+            InMemoryFeedRepository.deleteTo("https://somenews.com", deleteToItem!!.guid)
 
             val afterDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
             assertThat(afterDelete?.map { it.title }, `is`(listOf("Title 4")))

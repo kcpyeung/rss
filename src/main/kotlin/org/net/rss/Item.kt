@@ -1,6 +1,5 @@
 package org.net.rss
 
-import org.net.rss.util.Id
 import java.time.ZonedDateTime
 
 class Item(getAsString: (String) -> String?, subscription: Subscription) : Comparable<Item> {
@@ -8,7 +7,7 @@ class Item(getAsString: (String) -> String?, subscription: Subscription) : Compa
     val link = if (getAsString("link") != null) subscription.linkRewrite(getAsString("link")!!) else null
     val description = getAsString("description")
     val pubDate = if (getAsString("pubDate") == null) ZonedDateTime.now() else ZonedDateTime.parse(getAsString("pubDate"), subscription.dateFormat)
-    val guid = getAsString("guid") ?: Id("${title}:${link}:${description}:${pubDate}").hash
+    val guid = subscription.idGenerator("${title}:${link}:${description}")
 
     override fun compareTo(other: Item): Int {
         val dateComparison = this.pubDate.compareTo(other.pubDate)

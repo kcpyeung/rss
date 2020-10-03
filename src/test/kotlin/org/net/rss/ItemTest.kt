@@ -2,8 +2,10 @@ package org.net.rss
 
 import io.mockk.every
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -11,7 +13,6 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class ItemTest {
     val subscription = Subscription("https://www.theguardian.com/au/rss", DateTimeFormatter.RFC_1123_DATE_TIME)
@@ -101,37 +102,38 @@ class ItemTest {
         assertThat(rss.items[1].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("+10:00"))))
     }
 
-    @Test
-    fun `generates item guid if missing from rss xml`() {
-        mockkStatic("java.util.Base64")
-        every {
-            Base64.getEncoder().encodeToString(any())
-        } returns "kICr1LONJhcb6BKHyiM7BIzCFrU="
+    @AfterEach
+    fun unmock() = unmockkAll()
 
+    @Test
+    fun `supplied guid is ignored and item guid is calculated`() {
         val rss = Rss(rssWith2Items, subscription)
 
-        assertThat(rss.items[0].guid, `is`("F44F0AAA-78ED-4374-9F93-AFF05829E218"))
-        assertThat(rss.items[1].guid, `is`("kICr1LONJhcb6BKHyiM7BIzCFrU="))
+        assertThat(rss.items[0].guid, `is`("S703KZLSnJyg9pgrpB8toGqhEQg="))
+        assertThat(rss.items[1].guid, `is`("qdmNgHhyl9deZuRho6wd8lssaDQ="))
     }
 
     @Nested
     inner class Sorting {
+        private val sub0 = Subscription("https://some.site", DateTimeFormatter.RFC_1123_DATE_TIME, idGenerator = { _ -> "00000"})
+        private val sub1 = Subscription("https://some.site", DateTimeFormatter.RFC_1123_DATE_TIME, idGenerator = { _ -> "11111"})
+
         @Test
         fun `sort items by pubDate ascendingly if different`() {
-            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "later" }, subscription)
-            val i2 = Item({ if (it == "pubDate") "Mon, 14 Sep 2020 20:51:10 +1000" else "earlier" }, subscription)
+            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else null }, sub1)
+            val i2 = Item({ if (it == "pubDate") "Mon, 14 Sep 2020 20:51:10 +1000" else null }, sub0)
 
             val list = listOf(i1, i2)
             val sorted = list.sorted()
 
-            assertThat(sorted.get(0).guid, `is`("earlier"))
-            assertThat(sorted.get(1).guid, `is`("later"))
+            assertThat(sorted.get(0).guid, `is`("00000"))
+            assertThat(sorted.get(1).guid, `is`("11111"))
         }
 
         @Test
         fun `sort items by guid ascendingly if pubDate identical`() {
-            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "11111" }, subscription)
-            val i2 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else "00000" }, subscription)
+            val i1 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else null }, sub0)
+            val i2 = Item({ if (it == "pubDate") "Tue, 15 Sep 2020 20:51:10 +1000" else null }, sub1)
 
             val list = listOf(i1, i2)
             val sorted = list.sorted()
