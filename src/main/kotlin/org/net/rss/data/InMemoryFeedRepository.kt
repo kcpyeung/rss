@@ -1,7 +1,7 @@
 package org.net.rss.data
 
 import org.net.rss.Rss
-import java.util.Collections
+import java.util.*
 
 object InMemoryFeedRepository {
     private val feeds = Collections.synchronizedMap(hashMapOf<String, Rss>())
@@ -25,5 +25,9 @@ object InMemoryFeedRepository {
 
     internal fun clear() {
         feeds.clear()
+    }
+
+    fun deleteTo(source: String, guid: String) {
+        feeds[source]?.deleteTo(guid)
     }
 }

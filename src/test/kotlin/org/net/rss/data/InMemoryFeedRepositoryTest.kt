@@ -3,6 +3,7 @@ package org.net.rss.data
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
 import org.net.rss.Subscription
@@ -19,12 +20,14 @@ class InMemoryFeedRepositoryTest {
     <title>Victoria articles feed</title>
     <category>Australian Broadcasting Corporation: All content</category>
     <item>
+        <guid>guid1</guid>
         <title>Title 1</title>
         <link>https://somenews.com/1</link>
         <description>description 1</description>
         <pubDate>Mon, 14 Sep 2020 20:50:00 +1000</pubDate>
     </item>
     <item>
+        <guid>guid2</guid>
         <title>Title 2</title>
         <link>https://somenews.com/2</link>
         <description>description 2</description>
@@ -42,12 +45,14 @@ class InMemoryFeedRepositoryTest {
     <title>Victoria articles feed</title>
     <category>Australian Broadcasting Corporation: All content</category>
     <item>
+        <guid>guid3</guid>
         <title>Title 3</title>
         <link>https://somenews.com/3</link>
         <description>description 3</description>
         <pubDate>Tue, 15 Sep 2020 20:50:00 +1000</pubDate>
     </item>
     <item>
+        <guid>guid4</guid>
         <title>Title 4</title>
         <link>https://somenews.com/4</link>
         <description>description 4</description>
@@ -65,12 +70,14 @@ class InMemoryFeedRepositoryTest {
     <title>Victoria articles feed</title>
     <category>Australian Broadcasting Corporation: All content</category>
     <item>
+        <guid>guid2</guid>
         <title>Title 2</title>
         <link>https://somenews.com/2</link>
         <description>description 2</description>
         <pubDate>Mon, 14 Sep 2020 20:51:10 +1000</pubDate>
     </item>
     <item>
+        <guid>guid4</guid>
         <title>Title 4</title>
         <link>https://somenews.com/4</link>
         <description>description 4</description>
@@ -86,7 +93,7 @@ class InMemoryFeedRepositoryTest {
     }
 
     @Test
-    fun `emtpy repo stores all items`() {
+    fun `empty repo stores all items`() {
         val rss = Rss(rss1, subscription)
 
         InMemoryFeedRepository.add("https://somenews.com", rss)
@@ -113,5 +120,36 @@ class InMemoryFeedRepositoryTest {
 
         assertThat(items?.size, `is`(3))
         assertThat(items?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
+    }
+
+    @Nested
+    inner class Delete {
+        @BeforeEach
+        private fun populate() {
+            InMemoryFeedRepository.add("https://somenews.com", Rss(rss1, subscription))
+            InMemoryFeedRepository.add("https://somenews.com", Rss(rss2WithOverlap, subscription))
+        }
+
+        @Test
+        fun `deleting a nonexistent item has no effect`() {
+            val beforeDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
+            assertThat(beforeDelete?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
+
+            InMemoryFeedRepository.deleteTo("https://somenews.com", "abcde")
+
+            val afterDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
+            assertThat(afterDelete?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
+        }
+
+        @Test
+        fun `deleting items before and up to guid by time`() {
+            val beforeDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
+            assertThat(beforeDelete?.map { it.title }, `is`(listOf("Title 1", "Title 2", "Title 4")))
+
+            InMemoryFeedRepository.deleteTo("https://somenews.com", "guid2")
+
+            val afterDelete = InMemoryFeedRepository.get("https://somenews.com")?.items
+            assertThat(afterDelete?.map { it.title }, `is`(listOf("Title 4")))
+        }
     }
 }

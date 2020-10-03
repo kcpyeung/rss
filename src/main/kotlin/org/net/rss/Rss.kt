@@ -24,4 +24,12 @@ class Rss(rss: String, subscription: Subscription) {
         currentItems += newItems
         this.items = Collections.unmodifiableList(currentItems.toList().sorted())
     }
+
+    fun deleteTo(guid: String) {
+        val found = items.find { it.guid == guid } ?: return
+
+        val itemCopy = items.toMutableList()
+        val whereIsIt = itemCopy.indexOf(found)
+        this.items = Collections.unmodifiableList(itemCopy.subList(whereIsIt + 1, itemCopy.size))
+    }
 }
