@@ -30,8 +30,7 @@ fun main() {
     app.asServer(SunHttp(8000)).start()
 }
 
-const val FIVE_MINUTES = 5  * 1000L
-//const val FIVE_MINUTES = 5 * 60 * 1000L
+const val FIVE_MINUTES = 5 * 60 * 1000L
 
 val app = routes(
   "/" bind GET to { _ -> Response(OK).body(Page(feedDivs()).asHtml()) },
