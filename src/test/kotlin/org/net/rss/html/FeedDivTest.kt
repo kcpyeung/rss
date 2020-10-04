@@ -6,7 +6,6 @@ import io.mockk.unmockkAll
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
 import org.net.rss.Subscription
@@ -49,34 +48,32 @@ class FeedDivTest {
 </rss>
 """.trimIndent()
 
-    @Nested
-    inner class FeedRelatedTests {
-        @Test
-        fun div_id_is_feed_title() {
-            val div = FeedDiv(Rss(rssWith2Items, subscription))
+    @Test
+    fun div_id_is_feed_title() {
+        val div = FeedDiv(Rss(rssWith2Items, subscription))
 
-            assertThat(div.id, `is`("victoria_articles_feed"))
-        }
+        assertThat(div.id, `is`("victoria_articles_feed"))
+    }
 
-        @Test
-        fun feed_div_has_title_plus_items() {
-            val div = FeedDiv(Rss(rssWith2Items, subscription))
+    @Test
+    fun feed_div_has_title_plus_items() {
+        val div = FeedDiv(Rss(rssWith2Items, subscription))
 
-            assertThat(div.items.size, `is`(2))
-        }
+        assertThat(div.items.size, `is`(2))
+    }
 
-        @AfterEach
-        fun unmock() = unmockkAll()
+    @AfterEach
+    fun unmock() = unmockkAll()
 
-        @Test
-        fun `full feed html`() {
-            val clock = Clock.fixed(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("+10:00"))
-            mockkStatic("java.time.ZonedDateTime")
-            every { ZonedDateTime.now() } returns ZonedDateTime.now(clock)
+    @Test
+    fun `full feed html`() {
+        val clock = Clock.fixed(Instant.parse("2020-09-27T07:30:00Z"), ZoneId.of("+10:00"))
+        mockkStatic("java.time.ZonedDateTime")
+        every { ZonedDateTime.now() } returns ZonedDateTime.now(clock)
 
-            val div = FeedDiv(Rss(rssWith2Items, subscription))
+        val div = FeedDiv(Rss(rssWith2Items, subscription))
 
-            assertThat(div.asHtml(), `is`("""
+        assertThat(div.asHtml(), `is`("""
                 |<div id="victoria_articles_feed">
                 |<div class="feed_title">Victoria articles feed</div>
                 |<div class="even" id="victoria_articles_feed-0">
@@ -109,6 +106,5 @@ class FeedDivTest {
                 |</div>
                 |</div>
             """.trimMargin()))
-        }
     }
 }
