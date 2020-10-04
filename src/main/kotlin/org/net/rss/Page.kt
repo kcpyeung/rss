@@ -7,13 +7,21 @@ class Page(private val feedDivs: List<FeedDiv>) {
 
     private fun toc(): String {
         val feedLinks =
-          join(feedDivs.map { """<div><b><a href="#${it.id}">${it.title}</a></b></div><p/>""" })
+          join(feedDivs.map { """<div><b>${titleOrLink(it)}</b></div><p/>""" })
 
         return """
             <div id="toc">
             ${feedLinks}
             </div>
         """.trimIndent()
+    }
+
+    private fun titleOrLink(feedDiv: FeedDiv): String {
+        if (feedDiv.items.isEmpty()) {
+            return feedDiv.title!!
+        } else {
+            return """<a href="#${feedDiv.id}">${feedDiv.title}</a>"""
+        }
     }
 
     fun asHtml(): String {
