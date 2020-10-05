@@ -4,11 +4,11 @@ import org.net.rss.data.InMemoryFeedRepository
 import org.net.rss.io.Fetcher
 import java.net.http.HttpClient
 
-class Poller {
-    fun poll() {
+class Poller(subscriptions: List<Subscription>) {
+    val poll = {
         val fetcher = Fetcher(HttpClient.newHttpClient())
 
-        Subscriptions.all
+        subscriptions
           .parallelStream()
           .map { fetcher.fetch(it) }
           .forEach { InMemoryFeedRepository.add(it) }

@@ -14,15 +14,18 @@ import org.net.rss.html.FeedDiv
 import java.time.LocalTime
 import kotlin.concurrent.thread
 
+private val subscriptions = Subscriptions().all
+private val poller = Poller(subscriptions)
+
 fun main() {
     println("${LocalTime.now()}: Retrieving feeds, please wait...")
-    Poller().poll()
+    poller.poll()
     println("${LocalTime.now()}: Done.")
 
     thread {
         while (true) {
             Thread.sleep(FIVE_MINUTES)
-            Poller().poll()
+            poller.poll()
         }
     }
 
@@ -38,8 +41,7 @@ val app = routes(
 )
 
 private fun feedDivs(): List<FeedDiv> {
-    return Subscriptions
-      .all
+    return subscriptions
       .mapNotNull { InMemoryFeedRepository.get(it.feedIdGen(it.url)) }
       .map { FeedDiv(it) }
 }
