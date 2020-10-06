@@ -1,7 +1,7 @@
 package org.net.rss.io
 
 import org.net.rss.Rss
-import org.net.rss.Subscription
+import org.net.rss.config.Subscription
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest

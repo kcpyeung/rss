@@ -8,7 +8,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
-import org.net.rss.Subscription
+import org.net.rss.config.Subscription
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId

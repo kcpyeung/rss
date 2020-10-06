@@ -1,5 +1,6 @@
 package org.net.rss
 
+import org.net.rss.config.Subscription
 import org.net.rss.data.InMemoryFeedRepository
 import org.net.rss.io.Fetcher
 import java.net.http.HttpClient

@@ -1,5 +1,6 @@
 package org.net.rss
 
+import org.net.rss.config.Subscription
 import org.net.rss.xml.XmlHelper
 import java.time.ZonedDateTime
 import java.util.*

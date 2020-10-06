@@ -1,5 +1,6 @@
 package org.net.rss
 
+import org.net.rss.config.Subscription
 import java.time.ZonedDateTime
 
 class Item(getAsString: (String) -> String?, subscription: Subscription) : Comparable<Item> {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.net.rss.Rss
-import org.net.rss.Subscription
+import org.net.rss.config.Subscription
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId

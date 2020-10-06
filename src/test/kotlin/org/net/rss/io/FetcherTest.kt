@@ -5,7 +5,7 @@ import io.mockk.mockk
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
-import org.net.rss.Subscription
+import org.net.rss.config.Subscription
 import java.net.http.HttpClient
 import java.net.http.HttpResponse
 import java.time.format.DateTimeFormatter

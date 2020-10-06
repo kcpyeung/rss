@@ -9,6 +9,7 @@ import org.http4k.routing.path
 import org.http4k.routing.routes
 import org.http4k.server.SunHttp
 import org.http4k.server.asServer
+import org.net.rss.config.Subscriptions
 import org.net.rss.data.InMemoryFeedRepository
 import org.net.rss.html.FeedDiv
 import java.io.File

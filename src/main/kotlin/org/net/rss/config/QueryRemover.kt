@@ -1,4 +1,4 @@
-package org.net.rss
+package org.net.rss.config
 
 class QueryRemover : LinkRewriterFactory {
     override fun get(): (String) -> String {

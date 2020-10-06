@@ -3,6 +3,7 @@ package org.net.rss
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
+import org.net.rss.config.Subscription
 import java.time.format.DateTimeFormatter
 
 class RssTest {

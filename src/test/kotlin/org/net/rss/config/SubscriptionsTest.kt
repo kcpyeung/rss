@@ -1,4 +1,4 @@
-package org.net.rss
+package org.net.rss.config
 
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -30,7 +30,7 @@ class SubscriptionsTest {
             val yaml = """
             |-
             |   url: https://www.theguardian.com/au/rss
-            |   linkRewriteFactoryClass: org.net.rss.HelloLinkRewriterFactory
+            |   linkRewriteFactoryClass: org.net.rss.config.HelloLinkRewriterFactory
             |
             """.trimMargin()
 

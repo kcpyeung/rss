@@ -1,4 +1,4 @@
-package org.net.rss
+package org.net.rss.config
 
 import org.net.rss.util.Id
 import java.time.format.DateTimeFormatter
