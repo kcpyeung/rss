@@ -12,7 +12,6 @@ import org.http4k.server.asServer
 import org.net.rss.data.InMemoryFeedRepository
 import org.net.rss.html.FeedDiv
 import java.io.File
-import java.time.LocalTime
 import kotlin.concurrent.thread
 
 private val subscriptions = Subscriptions(readConfig("mine.yaml")).all
@@ -20,9 +19,7 @@ private val subscriptions = Subscriptions(readConfig("mine.yaml")).all
 private val poller = Poller(subscriptions)
 
 fun main() {
-    println("${LocalTime.now()}: Retrieving feeds, please wait...")
     poller.poll()
-    println("${LocalTime.now()}: Done.")
 
     thread {
         while (true) {
