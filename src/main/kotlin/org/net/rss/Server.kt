@@ -11,10 +11,12 @@ import org.http4k.server.SunHttp
 import org.http4k.server.asServer
 import org.net.rss.data.InMemoryFeedRepository
 import org.net.rss.html.FeedDiv
+import java.io.File
 import java.time.LocalTime
 import kotlin.concurrent.thread
 
-private val subscriptions = Subscriptions().all
+private val subscriptions = Subscriptions(readConfig("mine.yaml")).all
+
 private val poller = Poller(subscriptions)
 
 fun main() {
@@ -51,4 +53,8 @@ fun markRead(feed: String?, item: String?): Response {
         InMemoryFeedRepository.deleteTo(feed, item)
     }
     return Response(SEE_OTHER).header("Location", "/")
+}
+
+fun readConfig(filename: String): String {
+    return File(filename).readText()
 }

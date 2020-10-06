@@ -7,18 +7,12 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 class Subscriptions(yaml: String?) {
     constructor() : this(null)
 
-    private val removeQueries: (String) -> String = { it.substringBefore("?") }
-
     val all: List<Subscription>
 
     init {
         if (yaml == null) {
             all = listOf(
-              Subscription("https://www.theguardian.com/au/rss"),
-              Subscription("https://www.theage.com.au/rss/national/victoria.xml", linkRewrite = removeQueries),
-              Subscription("https://www.theage.com.au/rss/national.xml", linkRewrite = removeQueries),
-              Subscription("https://www.theage.com.au/rss/culture.xml", linkRewrite = removeQueries),
-              Subscription("https://www.theage.com.au/rss/lifestyle.xml", linkRewrite = removeQueries),
+              Subscription("https://www.theage.com.au/rss/culture.xml"),
             )
         } else {
             val objectMapper = ObjectMapper(YAMLFactory())
