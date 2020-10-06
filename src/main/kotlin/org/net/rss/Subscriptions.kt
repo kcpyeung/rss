@@ -25,8 +25,9 @@ class Subscriptions(yaml: String?) {
             objectMapper.registerModule(KotlinModule())
 
             all = objectMapper
-              .readValue(yaml, Array<Subscription>::class.java)
+              .readValue(yaml, Array<SubscriptionDto>::class.java)
               .toList()
+              .map { Subscription(it) }
         }
     }
 }
