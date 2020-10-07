@@ -10,7 +10,8 @@ class Poller(subscriptions: List<Subscription>) {
     val poll = {
         println("${LocalTime.now()}: START polling")
 
-        val fetcher = Fetcher(HttpClient.newHttpClient())
+        val http = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build()
+        val fetcher = Fetcher(http)
 
         subscriptions
           .parallelStream()
