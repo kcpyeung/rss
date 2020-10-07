@@ -220,7 +220,7 @@ class InMemoryFeedRepositoryTest {
             InMemoryFeedRepository.add(rss)
             InMemoryFeedRepository.deleteTo("id", rss.items[0].guid)
 
-            val atom = Atom(AtomTest().atomString, AtomTest().subscription)
+            val atom = Atom(AtomTest().atomString, AtomTest().subscriptionWithoutTitle)
             InMemoryFeedRepository.add(atom)
             InMemoryFeedRepository.deleteTo("id", atom.items[0].guid)
         }

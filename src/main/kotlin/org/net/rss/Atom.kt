@@ -11,7 +11,7 @@ class Atom(atom: String, subscription: Subscription) : Feed {
     init {
         val xmlHelper = XmlHelper(atom)
 
-        title = xmlHelper.getAsString("/feed/title")
+        title = subscription.title ?: xmlHelper.getAsString("/feed/title")
         items = xmlHelper
           .getAtomLookups("/feed/entry")
           .map { Item(it, subscription) }

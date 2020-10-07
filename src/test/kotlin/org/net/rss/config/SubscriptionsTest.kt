@@ -1,6 +1,7 @@
 package org.net.rss.config
 
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -21,6 +22,23 @@ class SubscriptionsTest {
         assertThat(subscriptions.all.size, `is`(2))
         assertThat(subscriptions.all[0].url, `is`("https://www.theguardian.com/au/rss"))
         assertThat(subscriptions.all[1].url, `is`("https://www.theage.com.au/rss/national/victoria.xml"))
+    }
+
+    @Test
+    fun `yaml can specify title`() {
+        val yaml = """
+            |-
+            |   url: https://www.theguardian.com/au/rss
+            |   title: Title I want to see
+            |-
+            |   url: https://www.theage.com.au/rss/national/victoria.xml
+            |
+            """.trimMargin()
+
+        val subscriptions = Subscriptions(yaml)
+
+        assertThat(subscriptions.all[0].title, `is`("Title I want to see"))
+        assertThat(subscriptions.all[1].title, `is`(nullValue()))
     }
 
     @Nested

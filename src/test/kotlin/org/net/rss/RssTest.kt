@@ -4,10 +4,10 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.net.rss.config.Subscription
-import java.time.format.DateTimeFormatter
 
 class RssTest {
-    val subscription = Subscription("https://www.theguardian.com/au/rss", DateTimeFormatter.RFC_1123_DATE_TIME)
+    val subscriptionWithTitle = Subscription("https://www.theguardian.com/au/rss", title = "Overriding title")
+    val subscriptionWithoutTitle = Subscription("https://www.theguardian.com/au/rss")
 
     val rss = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -33,11 +33,16 @@ class RssTest {
 
     @Test
     fun rss_has_title() {
-        assertThat(Rss(rss, subscription).title, `is`("Victoria articles feed"))
+        assertThat(Rss(rss, subscriptionWithoutTitle).title, `is`("Victoria articles feed"))
+    }
+
+    @Test
+    fun `title from rss can be overridden in subscription`() {
+        assertThat(Rss(rss, subscriptionWithTitle).title, `is`("Overriding title"))
     }
 
     @Test
     fun `rss id is base64-sha1 of its subscription url`() {
-        assertThat(Rss(rss, subscription).id, `is`("ecQtfX6DhlbdNxbGorU4CBvRunw="))
+        assertThat(Rss(rss, subscriptionWithoutTitle).id, `is`("ecQtfX6DhlbdNxbGorU4CBvRunw="))
     }
 }

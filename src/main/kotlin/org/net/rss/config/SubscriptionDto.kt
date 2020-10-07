@@ -3,7 +3,8 @@ package org.net.rss.config
 data class SubscriptionDto(
   val url: String,
   val dateFormat: String?,
-  val linkRewriteFactoryClass: String?) {
+  val linkRewriteFactoryClass: String?,
+  val title: String?) {
 
     fun linkRewriter(): (String) -> String {
         if (linkRewriteFactoryClass == null) {

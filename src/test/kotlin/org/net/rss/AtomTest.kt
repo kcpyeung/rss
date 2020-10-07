@@ -11,7 +11,8 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class AtomTest {
-    val subscription = Subscription("https://theconversation.com/au/articles.atom", DateTimeFormatter.ISO_DATE_TIME)
+    val subscriptionWithTitle = Subscription("https://theconversation.com/au/articles.atom", dateFormat = DateTimeFormatter.ISO_DATE_TIME, title = "Overriding title")
+    val subscriptionWithoutTitle = Subscription("https://theconversation.com/au/articles.atom", dateFormat = DateTimeFormatter.ISO_DATE_TIME)
 
     val atomString = """
 |<feed xml:lang="en-US" xmlns="http://www.w3.org/2005/Atom" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
@@ -57,17 +58,22 @@ class AtomTest {
 
     @Test
     fun `atom has title`() {
-        assertThat(Atom(atomString, subscription).title, `is`("The Conversation – Articles (AU)"))
+        assertThat(Atom(atomString, subscriptionWithoutTitle).title, `is`("The Conversation – Articles (AU)"))
+    }
+
+    @Test
+    fun `title from atom can be overridden in subscription`() {
+        assertThat(Atom(atomString, subscriptionWithTitle).title, `is`("Overriding title"))
     }
 
     @Test
     fun `atom id is base64-sha1 of its subscription url`() {
-        assertThat(Atom(atomString, subscription).id, `is`("OIS3yBgpiekmgMj8jwAxBqkhM7o="))
+        assertThat(Atom(atomString, subscriptionWithoutTitle).id, `is`("OIS3yBgpiekmgMj8jwAxBqkhM7o="))
     }
 
     @Nested
     inner class AtomEntryMappedToItem {
-        private val atom = Atom(atomString, subscription)
+        private val atom = Atom(atomString, subscriptionWithoutTitle)
 
         @Test
         fun `atom entry is item`() {

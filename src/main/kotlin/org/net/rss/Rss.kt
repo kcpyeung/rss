@@ -11,7 +11,7 @@ class Rss(rss: String, subscription: Subscription) : Feed {
     init {
         val xmlHelper = XmlHelper(rss)
 
-        title = xmlHelper.getAsString("/rss/channel/title")
+        title = subscription.title ?: xmlHelper.getAsString("/rss/channel/title")
         safeCopy(xmlHelper
           .getRssLookups("/rss/channel/item")
           .map { Item(it, subscription) })
