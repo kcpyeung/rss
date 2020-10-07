@@ -1,19 +1,19 @@
 package org.net.rss.data
 
-import org.net.rss.Rss
+import org.net.rss.Feed
 import java.util.*
 
 object InMemoryFeedRepository {
     private val feeds = Collections.synchronizedMap(hashMapOf<String, TimeTrackingRss>())
 
-    fun add(rss: Rss) {
-        val stored = feeds[rss.id]
+    fun add(feed: Feed) {
+        val stored = feeds[feed.id]
         if (stored == null) {
-            feeds[rss.id] = TimeTrackingRss(rss)
+            feeds[feed.id] = TimeTrackingRss(feed)
         } else {
-            val storedRss = stored.rss
-            storedRss.addItems(rss.items, stored.lastRefreshedAt)
-            feeds[rss.id] = TimeTrackingRss(storedRss)
+            val storedRss = stored.feed
+            storedRss.addItems(feed.items, stored.lastRefreshedAt)
+            feeds[feed.id] = TimeTrackingRss(storedRss)
         }
     }
 
@@ -21,8 +21,8 @@ object InMemoryFeedRepository {
         return feeds.containsKey(source)
     }
 
-    fun get(source: String): Rss? {
-        return feeds[source]?.rss
+    fun get(source: String): Feed? {
+        return feeds[source]?.feed
     }
 
     internal fun clear() {
@@ -30,7 +30,7 @@ object InMemoryFeedRepository {
     }
 
     fun deleteTo(source: String, guid: String) {
-        val rss = feeds[source]?.rss ?: return
+        val rss = feeds[source]?.feed ?: return
         rss.deleteTo(guid)
         feeds[source] = TimeTrackingRss(rss)
     }

@@ -8,6 +8,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.net.rss.Atom
+import org.net.rss.AtomTest
 import org.net.rss.Rss
 import org.net.rss.config.Subscription
 import java.time.Clock
@@ -208,6 +210,19 @@ class InMemoryFeedRepositoryTest {
 
             val afterDelete = InMemoryFeedRepository.get("id")?.items
             assertThat(afterDelete?.isEmpty(), `is`(true))
+        }
+    }
+
+    @Nested
+    inner class RssAtom {
+        fun `repository accepts both rss and atom`() {
+            val rss = Rss(rss1, subscription)
+            InMemoryFeedRepository.add(rss)
+            InMemoryFeedRepository.deleteTo("id", rss.items[0].guid)
+
+            val atom = Atom(AtomTest().atomString, AtomTest().subscription)
+            InMemoryFeedRepository.add(atom)
+            InMemoryFeedRepository.deleteTo("id", atom.items[0].guid)
         }
     }
 }

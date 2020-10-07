@@ -1,10 +1,8 @@
 package org.net.rss.config
 
-import java.time.format.DateTimeFormatter
-
 data class SubscriptionDto(
   val url: String,
-  val dateFormat: DateTimeFormatter = DateTimeFormatter.RFC_1123_DATE_TIME,
+  val dateFormat: String?,
   val linkRewriteFactoryClass: String?) {
 
     fun linkRewriter(): (String) -> String {

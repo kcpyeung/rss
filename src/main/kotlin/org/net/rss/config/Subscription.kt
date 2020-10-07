@@ -8,6 +8,8 @@ data class Subscription(val url: String,
                         val linkRewrite: (String) -> String = { it },
                         val feedIdGen: (String) -> String = { Id(it).hash },
                         val itemIdGen: (String) -> String = { Id(it).hash }) {
-    constructor(dto: SubscriptionDto): this(dto.url,
-      linkRewrite = dto.linkRewriter())
+    constructor(dto: SubscriptionDto) : this(dto.url,
+      linkRewrite = dto.linkRewriter(),
+      dateFormat = if (dto.dateFormat == null) DateTimeFormatter.RFC_1123_DATE_TIME else DateTimeFormatter.ofPattern(dto.dateFormat)
+    )
 }

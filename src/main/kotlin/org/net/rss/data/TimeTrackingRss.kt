@@ -1,8 +1,8 @@
 package org.net.rss.data
 
-import org.net.rss.Rss
+import org.net.rss.Feed
 import java.time.ZonedDateTime
 
-data class TimeTrackingRss(val rss: Rss) {
-    val lastRefreshedAt = if (rss.items.isNotEmpty()) rss.items.last().pubDate else ZonedDateTime.now()
+data class TimeTrackingRss(val feed: Feed) {
+    val lastRefreshedAt = if (feed.items.isNotEmpty()) feed.items.last().pubDate else ZonedDateTime.now()
 }

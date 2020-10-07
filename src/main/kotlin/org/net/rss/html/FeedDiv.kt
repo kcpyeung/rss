@@ -1,12 +1,12 @@
 package org.net.rss.html
 
-import org.net.rss.Rss
+import org.net.rss.Feed
 
-class FeedDiv(rss: Rss) {
-    val hash = rss.id
-    val title = rss.title
+class FeedDiv(feed: Feed) {
+    val hash = feed.id
+    val title = feed.title
     val id = title?.toLowerCase()?.replace(" ", "_")
-    val items = rss.items.mapIndexed { index, item -> ItemDiv(index, item, this) }
+    val items = feed.items.mapIndexed { index, item -> ItemDiv(index, item, this) }
 
     fun asHtml(): String {
         val buffer = StringBuilder(1024)
