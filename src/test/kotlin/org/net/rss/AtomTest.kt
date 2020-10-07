@@ -2,14 +2,18 @@ package org.net.rss
 
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.net.rss.config.Subscription
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class AtomTest {
     val subscription = Subscription("https://theconversation.com/au/articles.atom", DateTimeFormatter.ISO_DATE_TIME)
 
-    val atom = """
+    val atomString = """
 |<feed xml:lang="en-US" xmlns="http://www.w3.org/2005/Atom" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 |   <id>tag:theconversation.com,2011:/au/articles</id>
 |   <link rel="alternate" type="text/html" href="https://theconversation.com"/>
@@ -53,11 +57,42 @@ class AtomTest {
 
     @Test
     fun `atom has title`() {
-        assertThat(Atom(atom, subscription).title, `is`("The Conversation – Articles (AU)"))
+        assertThat(Atom(atomString, subscription).title, `is`("The Conversation – Articles (AU)"))
     }
 
     @Test
     fun `atom id is base64-sha1 of its subscription url`() {
-        assertThat(Atom(atom, subscription).id, `is`("OIS3yBgpiekmgMj8jwAxBqkhM7o="))
+        assertThat(Atom(atomString, subscription).id, `is`("OIS3yBgpiekmgMj8jwAxBqkhM7o="))
+    }
+
+    @Nested
+    inner class AtomEntryMappedToItem {
+        private val atom = Atom(atomString, subscription)
+
+        @Test
+        fun `atom entry is item`() {
+            assertThat(atom.items.size, `is`(2))
+
+            assertThat(atom.items[0].title, `is`("The budget assumes a COVID-19 vaccine becomes available next year. Is this feasible?"))
+            assertThat(atom.items[1].title, `is`("Netflix's The Social Dilemma highlights the problem with social media, but what's the solution?"))
+        }
+
+        @Test
+        fun `atom summary is mapped to description`() {
+            assertThat(atom.items[0].description, `is`("A group of 28 vaccine researchers said we might have a vaccine by late-2021, though it could take until well into 2022."))
+            assertThat(atom.items[1].description, `is`("The documentary educates viewers about the problems social networks present to both our privacy and agency online. But it doesn't really tell us how to fight the tide."))
+        }
+
+        @Test
+        fun `atom updated is mapped to pubDate`() {
+            assertThat(atom.items[0].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-10-06T05:45:51Z"), ZoneId.of("Z"))))
+            assertThat(atom.items[1].pubDate, `is`(ZonedDateTime.ofInstant(Instant.parse("2020-10-06T05:28:06Z"), ZoneId.of("Z"))))
+        }
+
+        @Test
+        fun `atom link-href is mapped to link`() {
+            assertThat(atom.items[0].link, `is`("https://theconversation.com/the-budget-assumes-a-covid-19-vaccine-becomes-available-next-year-is-this-feasible-147557"))
+            assertThat(atom.items[1].link, `is`("https://theconversation.com/netflixs-the-social-dilemma-highlights-the-problem-with-social-media-but-whats-the-solution-147351"))
+        }
     }
 }

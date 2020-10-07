@@ -4,7 +4,7 @@ import org.w3c.dom.Node
 import org.w3c.dom.NodeList
 import org.xml.sax.InputSource
 import java.io.StringReader
-import java.util.Collections
+import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
@@ -16,13 +16,26 @@ class XmlHelper(xml: String) {
         return getAsString0(doc, path)
     }
 
-    fun getLookups(path: String): List<(String) -> String?> {
+    fun getRssLookups(path: String): List<(String) -> String?> {
         val nodeList = get(doc, path)
         val list = arrayListOf<(String) -> String?>()
         if (nodeList.length > 0) {
             for (i in 0 until nodeList.length) {
                 val node = nodeList.item(i)
                 list += { getAsString0(node, it) }
+            }
+        }
+
+        return Collections.unmodifiableList(list)
+    }
+
+    fun getAtomLookups(path: String): List<(String) -> String?> {
+        val nodeList = get(doc, path)
+        val list = arrayListOf<(String) -> String?>()
+        if (nodeList.length > 0) {
+            for (i in 0 until nodeList.length) {
+                val node = nodeList.item(i)
+                list += { getAsStringAtom(node, it) }
             }
         }
 
@@ -38,6 +51,21 @@ class XmlHelper(xml: String) {
 
     private fun getAsString0(node: Node, path: String): String? {
         return get(node, path).item(0)?.textContent?.trim()
+    }
+
+    private fun getAsStringAtom(node: Node, path: String): String? {
+        if (path == "description") return getAsString0(node, "summary")
+        if (path == "pubDate") return getAsString0(node, "published")
+        if (path == "link") {
+            return get(node, path)
+              .item(0)
+              ?.attributes
+              ?.getNamedItem("href")
+              ?.textContent
+              ?.trim()
+        }
+
+        return getAsString0(node, path)
     }
 
     private fun getXmlDoc(rss: String): Node {

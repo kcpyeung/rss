@@ -17,7 +17,7 @@ class Rss(rss: String, subscription: Subscription) {
         category = xmlHelper.getAsString("/rss/channel/category")
         title = xmlHelper.getAsString("/rss/channel/title")
         safeCopy(xmlHelper
-          .getLookups("/rss/channel/item")
+          .getRssLookups("/rss/channel/item")
           .map { Item(it, subscription) })
     }
 
