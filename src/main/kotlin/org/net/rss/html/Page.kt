@@ -1,6 +1,4 @@
-package org.net.rss
-
-import org.net.rss.html.FeedDiv
+package org.net.rss.html
 
 class Page(private val feedDivs: List<FeedDiv>) {
     private val divs = join(feedDivs.map { it.asHtml() })
