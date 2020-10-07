@@ -5,16 +5,14 @@ import org.net.rss.xml.XmlHelper
 import java.time.ZonedDateTime
 import java.util.*
 
-class Rss(rss: String, subscription: Subscription) {
-    val id = subscription.feedIdGen(subscription.url)
-    val category: String?
-    val title: String?
-    lateinit var items: List<Item>
+class Rss(rss: String, subscription: Subscription) : Feed {
+    override val id = subscription.feedIdGen(subscription.url)
+    override val title: String?
+    override lateinit var items: List<Item>
 
     init {
         val xmlHelper = XmlHelper(rss)
 
-        category = xmlHelper.getAsString("/rss/channel/category")
         title = xmlHelper.getAsString("/rss/channel/title")
         safeCopy(xmlHelper
           .getRssLookups("/rss/channel/item")

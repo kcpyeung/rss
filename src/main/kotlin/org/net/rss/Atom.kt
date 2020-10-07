@@ -3,10 +3,10 @@ package org.net.rss
 import org.net.rss.config.Subscription
 import org.net.rss.xml.XmlHelper
 
-class Atom(atom: String, subscription: Subscription) {
-    val id = subscription.feedIdGen(subscription.url)
-    val title: String?
-    val items: List<Item>
+class Atom(atom: String, subscription: Subscription) : Feed {
+    override val id = subscription.feedIdGen(subscription.url)
+    override val title: String?
+    override lateinit var items: List<Item>
 
     init {
         val xmlHelper = XmlHelper(atom)

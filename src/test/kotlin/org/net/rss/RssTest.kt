@@ -32,11 +32,6 @@ class RssTest {
 """.trimIndent()
 
     @Test
-    fun rss_has_category() {
-        assertThat(Rss(rss, subscription).category, `is`("Australian Broadcasting Corporation: All content"))
-    }
-
-    @Test
     fun rss_has_title() {
         assertThat(Rss(rss, subscription).title, `is`("Victoria articles feed"))
     }
