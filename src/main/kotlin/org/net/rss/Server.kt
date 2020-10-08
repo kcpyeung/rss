@@ -20,7 +20,7 @@ private val subscriptions = Subscriptions(readConfig("mine.yaml")).all
 
 private val poller = Poller(subscriptions)
 
-fun main() {
+fun main(args: Array<String>) {
     poller.poll()
 
     thread {
@@ -30,8 +30,9 @@ fun main() {
         }
     }
 
-    println("Server starting on port 8000.")
-    app.asServer(SunHttp(8000)).start()
+    val port = port(args)
+    println("Server starting on port ${port}.")
+    app.asServer(SunHttp(port)).start()
 }
 
 const val FIVE_MINUTES = 5 * 60 * 1000L
@@ -45,6 +46,14 @@ private fun feedDivs(): List<FeedDiv> {
     return subscriptions
       .mapNotNull { InMemoryFeedRepository.get(it.feedIdGen(it.url)) }
       .map { FeedDiv(it) }
+}
+
+private fun port(args: Array<String>): Int {
+    if (args.isNotEmpty()) {
+        return args[0].toInt()
+    } else {
+        return 8000
+    }
 }
 
 fun markRead(feed: String?, item: String?): Response {
