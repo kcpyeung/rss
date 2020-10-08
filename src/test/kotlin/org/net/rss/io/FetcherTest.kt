@@ -3,9 +3,11 @@ package org.net.rss.io
 import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.net.rss.config.Subscription
+import java.net.ConnectException
 import java.net.http.HttpClient
 import java.net.http.HttpResponse
 import java.time.format.DateTimeFormatter
@@ -51,7 +53,18 @@ class FetcherTest {
         val fetcher = Fetcher(http)
         val feed = fetcher.fetch(Subscription("https://realnews.net/rss", DateTimeFormatter.RFC_1123_DATE_TIME))
 
-        assertThat(feed.title, `is`("Victoria articles feed"))
-        assertThat(feed.items.size, `is`(2))
+        assertThat(feed?.title, `is`("Victoria articles feed"))
+        assertThat(feed?.items?.size, `is`(2))
+    }
+
+    @Test
+    fun `fetch errors return null`() {
+        val http = mockk<HttpClient>()
+        every { http.send(any(), HttpResponse.BodyHandlers.ofString()) } throws ConnectException("Unknown host")
+
+        val fetcher = Fetcher(http)
+        val feed = fetcher.fetch(Subscription("https://realnews.net/rss", DateTimeFormatter.RFC_1123_DATE_TIME))
+
+        assertThat(feed, `is`(nullValue()))
     }
 }

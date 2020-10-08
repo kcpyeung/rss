@@ -10,11 +10,15 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 class Fetcher(private val http: HttpClient) {
-    fun fetch(subscription: Subscription): Feed {
-        val request = toRequest(subscription.url)
+    fun fetch(subscription: Subscription): Feed? {
+        return try {
+            val request = toRequest(subscription.url)
 
-        val xml = http.send(request, HttpResponse.BodyHandlers.ofString()).body()
-        return toFeed(xml, subscription)
+            val xml = http.send(request, HttpResponse.BodyHandlers.ofString()).body()
+            toFeed(xml, subscription)
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun toFeed(xml: String, subscription: Subscription): Feed {
