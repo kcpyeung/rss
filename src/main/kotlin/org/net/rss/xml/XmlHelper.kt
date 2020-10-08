@@ -55,7 +55,7 @@ class XmlHelper(xml: String) {
 
     private fun getAsStringAtom(node: Node, path: String): String? {
         if (path == "description") return getAsString0(node, "summary")
-        if (path == "pubDate") return getAsString0(node, "published")
+        if (path == "pubDate") return getAsString0(node, "updated")
         if (path == "link") {
             return get(node, path)
               .item(0)
