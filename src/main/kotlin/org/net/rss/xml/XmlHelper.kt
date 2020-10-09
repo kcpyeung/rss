@@ -54,7 +54,14 @@ class XmlHelper(xml: String) {
     }
 
     private fun getAsStringAtom(node: Node, path: String): String? {
-        if (path == "description") return getAsString0(node, "summary")
+        if (path == "description") {
+            val content = getAsString0(node, "content")
+            val summary = getAsString0(node, "summary")
+
+            if (content == null) return summary
+            if (summary == null) return content
+            return "${content}\n${summary}"
+        }
         if (path == "pubDate") return getAsString0(node, "updated")
         if (path == "link") {
             return get(node, path)

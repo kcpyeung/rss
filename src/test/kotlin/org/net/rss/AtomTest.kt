@@ -21,7 +21,7 @@ class AtomTest {
 |   <link rel="self" type="application/atom+xml" href="https://theconversation.com/au/articles.atom"/>
 |   <title>The Conversation – Articles (AU)</title>
 |   <updated>2020-10-06T05:45:51Z</updated>
-|   <entry>
+|  <entry>
 |    <id>tag:theconversation.com,2011:article/147557</id>
 |    <published>2020-10-06T05:45:51Z</published>
 |    <updated>2020-10-06T05:45:51Z</updated>
@@ -42,7 +42,6 @@ class AtomTest {
 |    <link rel="alternate" type="text/html" href="https://theconversation.com/netflixs-the-social-dilemma-highlights-the-problem-with-social-media-but-whats-the-solution-147351"/>
 |    <title>Netflix's The Social Dilemma highlights the problem with social media, but what's the solution?</title>
 |    <content type="html">Some other content text</content>
-|    <summary>The documentary educates viewers about the problems social networks present to both our privacy and agency online. But it doesn't really tell us how to fight the tide.</summary>
 |    <author>
 |      <name>Belinda Barnet, Senior Lecturer in Media and Communications, Swinburne University of Technology</name>
 |      <foaf:homepage rdf:resource="https://theconversation.com/profiles/belinda-barnet-219971"/>
@@ -50,6 +49,19 @@ class AtomTest {
 |    <author>
 |      <name>Diana Bossio, Lecturer, Media and Communications, Swinburne University of Technology</name>
 |      <foaf:homepage rdf:resource="https://theconversation.com/profiles/diana-bossio-1649"/>
+|    </author>
+|    <rights>Licensed as Creative Commons – attribution, no derivatives.</rights>
+|  </entry>
+|  <entry>
+|    <id>tag:theconversation.com,2011:article/147194</id>
+|    <published>2020-10-06T04:26:54Z</published>
+|    <updated>2020-10-06T04:26:54Z</updated>
+|    <link rel="alternate" type="text/html" href="https://theconversation.com/unis-are-run-like-corporations-but-their-leaders-are-less-accountable-heres-an-easy-way-to-fix-that-147194"/>
+|    <title>Unis are run like corporations but their leaders are less accountable. Here's an easy way to fix that</title>
+|    <summary>Ironically, a bit more of the right kind of corporatisation might help remedy the worst aspects of the current model of corporatised universities.</summary>
+|    <author>
+|      <name>Luke Beck, Associate Professor of Constitutional Law, Monash University</name>
+|      <foaf:homepage rdf:resource="https://theconversation.com/profiles/luke-beck-184936"/>
 |    </author>
 |    <rights>Licensed as Creative Commons – attribution, no derivatives.</rights>
 |  </entry>
@@ -77,16 +89,17 @@ class AtomTest {
 
         @Test
         fun `atom entry is item`() {
-            assertThat(atom.items.size, `is`(2))
+            assertThat(atom.items.size, `is`(3))
 
             assertThat(atom.items[0].title, `is`("The budget assumes a COVID-19 vaccine becomes available next year. Is this feasible?"))
             assertThat(atom.items[1].title, `is`("Netflix's The Social Dilemma highlights the problem with social media, but what's the solution?"))
         }
 
         @Test
-        fun `atom summary is mapped to description`() {
-            assertThat(atom.items[0].description, `is`("A group of 28 vaccine researchers said we might have a vaccine by late-2021, though it could take until well into 2022."))
-            assertThat(atom.items[1].description, `is`("The documentary educates viewers about the problems social networks present to both our privacy and agency online. But it doesn't really tell us how to fight the tide."))
+        fun `item description is mapped to content + summary`() {
+            assertThat(atom.items[0].description, `is`("Some content text\nA group of 28 vaccine researchers said we might have a vaccine by late-2021, though it could take until well into 2022."))
+            assertThat(atom.items[1].description, `is`("Some other content text"))
+            assertThat(atom.items[2].description, `is`("Ironically, a bit more of the right kind of corporatisation might help remedy the worst aspects of the current model of corporatised universities."))
         }
 
         @Test
