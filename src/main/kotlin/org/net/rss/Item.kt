@@ -7,6 +7,7 @@ class Item(getAsString: (String) -> String?, subscription: Subscription) : Compa
     val title = getAsString("title")
     val link = if (getAsString("link") != null) subscription.linkRewrite(getAsString("link")!!) else null
     val description = getAsString("description")
+    val content = getAsString("content")
     val pubDate = if (getAsString("pubDate") == null) ZonedDateTime.now() else ZonedDateTime.parse(getAsString("pubDate"), subscription.dateFormat)
     val guid = subscription.itemIdGen("${title}:${link}:${description}")
 

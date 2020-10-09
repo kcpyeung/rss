@@ -3,6 +3,7 @@ package org.net.rss
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkAll
+import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -76,6 +77,11 @@ class ItemTest {
         assertThat(item.description, `is`("<p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p>"))
         assertThat(item.link, `is`("https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598"))
         assertThat(item.title, `is`("How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community"))
+    }
+
+    @Test
+    fun `rss items never have content`() {
+        assertThat(Rss(rss, subscription).items[0].content, `is`(CoreMatchers.nullValue()))
     }
 
     @Test

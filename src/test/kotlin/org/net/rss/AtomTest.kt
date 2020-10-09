@@ -1,6 +1,7 @@
 package org.net.rss
 
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -96,10 +97,17 @@ class AtomTest {
         }
 
         @Test
-        fun `item description is mapped to content + summary`() {
-            assertThat(atom.items[0].description, `is`("Some content text\nA group of 28 vaccine researchers said we might have a vaccine by late-2021, though it could take until well into 2022."))
-            assertThat(atom.items[1].description, `is`("Some other content text"))
+        fun `item description is mapped to summary`() {
+            assertThat(atom.items[0].description, `is`("A group of 28 vaccine researchers said we might have a vaccine by late-2021, though it could take until well into 2022."))
+            assertThat(atom.items[1].description, `is`(nullValue()))
             assertThat(atom.items[2].description, `is`("Ironically, a bit more of the right kind of corporatisation might help remedy the worst aspects of the current model of corporatised universities."))
+        }
+
+        @Test
+        fun `item content is mapped to content`() {
+            assertThat(atom.items[0].content, `is`("Some content text"))
+            assertThat(atom.items[1].content, `is`("Some other content text"))
+            assertThat(atom.items[2].content, `is`(nullValue()))
         }
 
         @Test
