@@ -23,9 +23,19 @@ class ItemDiv(index: Int, private val item: Item, private val feedDiv: FeedDiv) 
         return """|<td class="content">
                 |    <div class="title_link"><a href="${item.link}" target="${item.guid}">${item.title}</a></div>
                 |    <div>${item.description}</div>
-                |    <div>Published at ${df.format(item.pubDate)}</div>
+                |    """.trimMargin() +
+          detailText() +
+             """|<div>Published at ${df.format(item.pubDate)}</div>
                 |    <div><p/></div>
                 |    </td>""".trimMargin()
+    }
+
+    private fun detailText(): String {
+        return if (item.content != null)
+            """|<div onclick="document.getElementById('${item.guid}').setAttribute('style', 'display: block')"><b>More >>></b></div>
+                 |    <div id="${item.guid}" style="display: none">${item.content}</div>
+                 |    
+              """.trimMargin() else ""
     }
 
     private fun actions(): String {
