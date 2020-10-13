@@ -29,6 +29,7 @@ dependencies {
     implementation("org.http4k:http4k-client-apache:3.262.0")
     testImplementation("io.mockk:mockk:1.10.0")
     testImplementation("org.hamcrest:hamcrest-all:1.3")
+    testImplementation("org.http4k:http4k-testing-hamkrest:3.266.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
 }
