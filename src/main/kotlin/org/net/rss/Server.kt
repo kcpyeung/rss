@@ -16,9 +16,9 @@ import org.net.rss.html.Page
 import java.io.File
 import kotlin.concurrent.thread
 
-private val subscriptions = Subscriptions(readConfig("mine.yaml")).all
+private val subscriptions = Subscriptions(readConfig("mine.yaml"))
 
-private val poller = Poller(subscriptions)
+private val poller = Poller(subscriptions.all)
 
 fun main(args: Array<String>) {
     poller.poll()
@@ -44,6 +44,7 @@ val app = routes(
 
 private fun feedDivs(): List<FeedDiv> {
     return subscriptions
+      .all
       .mapNotNull { InMemoryFeedRepository.get(it.feedIdGen(it.url)) }
       .map { FeedDiv(it) }
 }
