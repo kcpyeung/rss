@@ -9,6 +9,7 @@ class SectionPage(private val feedDivs: List<FeedDiv>) {
 
         return """
             <div id="toc">
+            <div id="main"><h1><a href="/">Main</a></h1></div>
             ${feedLinks}
             </div>
         """.trimIndent()
