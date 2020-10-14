@@ -15,8 +15,11 @@ class RouteGenerator(subscriptions: Subscriptions) {
         val mappings = subscriptions
           .sections
           .map { "/${it.name}" bind GET to { Response(OK) } }
-          .toTypedArray()
+          .toMutableList()
 
-        routes = routes(*mappings)
+        mappings.add("/" bind GET to { Response(OK) })
+        mappings.add("/read/{feed:.*}/{item:.*}" bind GET to { Response(OK) })
+
+        routes = routes(*mappings.toTypedArray())
     }
 }

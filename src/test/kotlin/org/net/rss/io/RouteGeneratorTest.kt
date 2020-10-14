@@ -35,4 +35,18 @@ class RouteGeneratorTest {
         assertThat(routes(Request(GET, "/science")), hasStatus(OK))
         assertThat(routes(Request(GET, "/gossip")), hasStatus(NOT_FOUND))
     }
+
+    @Test
+    fun `root path contains all news`() {
+        val routes = RouteGenerator(subscriptions).routes
+
+        assertThat(routes(Request(GET, "/")), hasStatus(OK))
+    }
+
+    @Test
+    fun `read path marks items read`() {
+        val routes = RouteGenerator(subscriptions).routes
+
+        assertThat(routes(Request(GET, "/read/feed_id/item_id")), hasStatus(OK))
+    }
 }
