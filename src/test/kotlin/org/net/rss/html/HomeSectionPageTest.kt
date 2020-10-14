@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.net.rss.config.Section
 import org.net.rss.config.Subscriptions
 
-class HomePageTest {
+class HomeSectionPageTest {
     @Test
     fun `home page links to all sections`() {
         val subscriptions = mockSubscriptions()

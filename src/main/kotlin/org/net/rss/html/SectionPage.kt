@@ -1,6 +1,6 @@
 package org.net.rss.html
 
-class Page(private val feedDivs: List<FeedDiv>) {
+class SectionPage(private val feedDivs: List<FeedDiv>) {
     private val divs = join(feedDivs.map { it.asHtml() })
 
     private fun toc(): String {

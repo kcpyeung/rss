@@ -14,7 +14,7 @@ import org.net.rss.config.Subscriptions
 import org.net.rss.data.InMemoryFeedRepository
 import org.net.rss.html.FeedDiv
 import org.net.rss.html.HomePage
-import org.net.rss.html.Page
+import org.net.rss.html.SectionPage
 
 class RouteGenerator(subscriptions: Subscriptions) {
     val routes: RoutingHttpHandler
@@ -22,7 +22,7 @@ class RouteGenerator(subscriptions: Subscriptions) {
     init {
         val mappings = subscriptions
           .sections
-          .map { section -> "/${section.name}" bind GET to { Response(OK).body(Page(feedDivs(section.subscriptions)).asHtml()) } }
+          .map { section -> "/${section.name}" bind GET to { Response(OK).body(SectionPage(feedDivs(section.subscriptions)).asHtml()) } }
           .toMutableList()
 
         mappings.add("/" bind GET to { Response(OK).body(HomePage(subscriptions).asHtml()) })
