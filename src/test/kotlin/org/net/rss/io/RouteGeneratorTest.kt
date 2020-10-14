@@ -5,6 +5,7 @@ import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Status.Companion.NOT_FOUND
 import org.http4k.core.Status.Companion.OK
+import org.http4k.core.Status.Companion.SEE_OTHER
 import org.http4k.hamkrest.hasStatus
 import org.junit.jupiter.api.Test
 import org.net.rss.config.Subscriptions
@@ -47,6 +48,6 @@ class RouteGeneratorTest {
     fun `read path marks items read`() {
         val routes = RouteGenerator(subscriptions).routes
 
-        assertThat(routes(Request(GET, "/read/feed_id/item_id")), hasStatus(OK))
+        assertThat(routes(Request(GET, "/read/feed_id/item_id")), hasStatus(SEE_OTHER))
     }
 }
