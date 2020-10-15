@@ -211,6 +211,18 @@ class InMemoryFeedRepositoryTest {
             val afterDelete = InMemoryFeedRepository.get("id")?.items
             assertThat(afterDelete?.isEmpty(), `is`(true))
         }
+
+        @Test
+        fun `subscription knows if it has unread items`() {
+            val beforeDelete = InMemoryFeedRepository.get("id")?.items
+
+            assertThat(subscription.hasUnreadItems(), `is`(true))
+
+            val deleteToItem = beforeDelete?.last()
+            InMemoryFeedRepository.deleteTo("id", deleteToItem!!.guid)
+
+            assertThat(subscription.hasUnreadItems(), `is`(false))
+        }
     }
 
     @Nested
