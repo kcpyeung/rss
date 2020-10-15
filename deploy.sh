@@ -17,4 +17,5 @@ scp -C ./build/libs/rss.jar ubuntu@$host:~
 scp ./*.yaml ubuntu@$host:~
 
 echo 'starting server remotely'
-ssh $host "sudo killall java; nohup sudo java -jar rss.jar 80 </dev/null >/dev/null 2>&1 &"
+ssh $host "sudo killall java"
+ssh $host "nohup sudo java -jar rss.jar 80 </dev/null >/dev/null 2>&1 &"
