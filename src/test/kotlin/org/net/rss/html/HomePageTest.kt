@@ -11,7 +11,7 @@ import org.net.rss.config.Subscriptions
 class HomePageTest {
     @Test
     fun `home page links to all unread sections`() {
-        val subscriptions = mockSubscriptions()
+        val subscriptions = subscriptionsOf(unread("news"), unread("jokes"), unread("science"))
 
         val homepage = HomePage(subscriptions)
 
@@ -23,7 +23,7 @@ class HomePageTest {
 
     @Test
     fun `home page does not link to read sections`() {
-        val subscriptions = mockSubscriptions2()
+        val subscriptions = subscriptionsOf(read("news"), unread("jokes"), unread("science"))
 
         val homepage = HomePage(subscriptions)
 
@@ -33,40 +33,25 @@ class HomePageTest {
           "<a href=\"/science\">science</a>")))
     }
 
-    private fun mockSubscriptions2(): Subscriptions {
-        val s1 = mockk<Section>()
-        every { s1.name } returns "news"
-        every { s1.hasUnreadItems() } returns false
+    private fun read(name: String): Section {
+        val section = mockk<Section>()
+        every { section.name } returns name
+        every { section.hasUnreadItems() } returns false
 
-        val s2 = mockk<Section>()
-        every { s2.name } returns "jokes"
-        every { s2.hasUnreadItems() } returns true
-
-        val s3 = mockk<Section>()
-        every { s3.name } returns "science"
-        every { s3.hasUnreadItems() } returns true
-
-        val subscriptions = mockk<Subscriptions>()
-        every { subscriptions.sections } returns listOf(s1, s2, s3)
-
-        return subscriptions
+        return section
     }
 
-    private fun mockSubscriptions(): Subscriptions {
-        val s1 = mockk<Section>()
-        every { s1.name } returns "news"
-        every { s1.hasUnreadItems() } returns true
+    private fun unread(name: String): Section {
+        val section = mockk<Section>()
+        every { section.name } returns name
+        every { section.hasUnreadItems() } returns true
 
-        val s2 = mockk<Section>()
-        every { s2.name } returns "jokes"
-        every { s2.hasUnreadItems() } returns true
+        return section
+    }
 
-        val s3 = mockk<Section>()
-        every { s3.name } returns "science"
-        every { s3.hasUnreadItems() } returns true
-
+    private fun subscriptionsOf(vararg sections: Section): Subscriptions {
         val subscriptions = mockk<Subscriptions>()
-        every { subscriptions.sections } returns listOf(s1, s2, s3)
+        every { subscriptions.sections } returns sections.toList()
 
         return subscriptions
     }
