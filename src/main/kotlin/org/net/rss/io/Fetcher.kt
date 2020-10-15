@@ -16,7 +16,10 @@ class Fetcher(private val http: HttpClient) {
 
             val xml = http.send(request, HttpResponse.BodyHandlers.ofString()).body()
             toFeed(xml, subscription)
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            println("error fetching ${subscription.url}")
+            println(e.message)
+            println()
             null
         }
     }
