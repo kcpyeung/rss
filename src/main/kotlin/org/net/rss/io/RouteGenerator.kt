@@ -9,6 +9,7 @@ import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.path
 import org.http4k.routing.routes
+import org.net.rss.config.Section
 import org.net.rss.config.Subscription
 import org.net.rss.config.Subscriptions
 import org.net.rss.data.InMemoryFeedRepository
@@ -22,7 +23,7 @@ class RouteGenerator(subscriptions: Subscriptions) {
     init {
         val mappings = subscriptions
           .sections
-          .map { section -> "/${section.name}" bind GET to { Response(OK).body(SectionPage(feedDivs(section.subscriptions)).asHtml()) } }
+          .map { section -> "/${section.name}" bind GET to { sectionPageOrRoot(section) } }
           .toMutableList()
 
         mappings.add("/" bind GET to { Response(OK).body(HomePage(subscriptions).asHtml()) })
@@ -30,6 +31,13 @@ class RouteGenerator(subscriptions: Subscriptions) {
 
         routes = routes(*mappings.toTypedArray())
     }
+
+    private fun sectionPageOrRoot(section: Section) =
+      if (section.hasUnreadItems()) {
+          Response(OK).body(SectionPage(feedDivs(section.subscriptions)).asHtml())
+      } else {
+          Response(SEE_OTHER).header("Location", "/")
+      }
 
     private fun feedDivs(subs: List<Subscription>): List<FeedDiv> {
         return subs
