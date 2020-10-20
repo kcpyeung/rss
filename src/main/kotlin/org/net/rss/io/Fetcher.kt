@@ -9,9 +9,9 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-class Fetcher(private val http: HttpClient) {
-    fun fetch(subscription: Subscription): Feed? {
-        return try {
+class Fetcher(http: HttpClient) {
+    val fetch: (Subscription) -> Feed? = { subscription ->
+        try {
             val request = toRequest(subscription.url)
 
             val xml = http.send(request, HttpResponse.BodyHandlers.ofString()).body()

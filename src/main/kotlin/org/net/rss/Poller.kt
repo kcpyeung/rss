@@ -11,15 +11,17 @@ class Poller(subscriptions: List<Subscription>) {
     val poll = {
         println("${LocalTime.now()}: START polling")
 
-        val http = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build()
-        val fetcher = Fetcher(http)
-
         subscriptions
           .parallelStream()
-          .map { fetcher.fetch(it) }
+          .map { fetcher().fetch(it) }
           .filter(Objects::nonNull)
           .forEach { InMemoryFeedRepository.add(it!!) }
 
         println("${LocalTime.now()}: DONE polling")
+    }
+
+    private fun fetcher(): Fetcher {
+        val http = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.ALWAYS).build()
+        return Fetcher(http)
     }
 }
