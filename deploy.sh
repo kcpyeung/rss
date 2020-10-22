@@ -19,4 +19,4 @@ scp ./*.yaml ubuntu@$host:~
 
 echo 'starting server remotely'
 ssh $host "killall java"
-ssh $host "nohup java -jar rss.jar $port </dev/null >/dev/null 2>&1 &"
+ssh $host "nohup java -jar rss.jar $port </dev/null >nohup.out 2>&1 &"
