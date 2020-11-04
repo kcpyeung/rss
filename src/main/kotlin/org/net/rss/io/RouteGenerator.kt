@@ -1,5 +1,6 @@
 package org.net.rss.io
 
+import org.http4k.core.Method.POST
 import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Response
@@ -9,6 +10,7 @@ import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.path
 import org.http4k.routing.routes
+import org.net.rss.Poller
 import org.net.rss.config.Section
 import org.net.rss.config.Subscription
 import org.net.rss.config.Subscriptions
@@ -28,8 +30,14 @@ class RouteGenerator(subscriptions: Subscriptions) {
 
         mappings.add("/" bind GET to { Response(OK).body(HomePage(subscriptions).asHtml()) })
         mappings.add("/read/{feed:.*}/{item:.*}" bind GET to { request -> markRead(request) })
+        mappings.add("/fetch" bind POST to { fetch(subscriptions) })
 
         routes = routes(*mappings.toTypedArray())
+    }
+
+    private fun fetch(subscriptions: Subscriptions): Response {
+        Poller(subscriptions.all).poll()
+        return Response(SEE_OTHER).header("Location", "/")
     }
 
     private fun sectionPageOrRoot(section: Section) =
