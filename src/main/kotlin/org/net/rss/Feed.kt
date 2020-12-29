@@ -1,9 +1,10 @@
 package org.net.rss
 
+import java.io.Serializable
 import java.time.ZonedDateTime
 import java.util.*
 
-interface Feed {
+interface Feed : Serializable {
     val id: String
     val title: String?
     var items: List<Item>

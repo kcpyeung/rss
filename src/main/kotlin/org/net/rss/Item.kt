@@ -1,9 +1,10 @@
 package org.net.rss
 
 import org.net.rss.config.Subscription
+import java.io.Serializable
 import java.time.ZonedDateTime
 
-class Item(getAsString: (String) -> String?, subscription: Subscription) : Comparable<Item> {
+class Item(getAsString: (String) -> String?, subscription: Subscription) : Comparable<Item>, Serializable {
     val title = getAsString("title")
     val link = if (getAsString("link") != null) subscription.linkRewrite(getAsString("link")!!) else null
     val description = getAsString("description")
