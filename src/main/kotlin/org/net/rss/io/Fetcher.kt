@@ -8,6 +8,7 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.time.Duration
 
 class Fetcher(http: HttpClient) {
     val fetch: (Subscription) -> Feed? = { subscription ->
@@ -35,6 +36,7 @@ class Fetcher(http: HttpClient) {
     private fun toRequest(url: String): HttpRequest {
         return HttpRequest
           .newBuilder(URI.create(url))
+          .timeout(Duration.ofSeconds(10))
           .build()
     }
 }
