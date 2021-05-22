@@ -29,6 +29,11 @@ class SectionPage(private val feedDivs: List<FeedDiv>) {
 
     private fun style(): String {
         return """
+            a {
+                font-size: 3em;
+                font-weight: bold;
+            }
+
             .odd {
                 background: #ffb6c1
             }
@@ -40,10 +45,6 @@ class SectionPage(private val feedDivs: List<FeedDiv>) {
             .feed_title {
                 font-weight: 700;
                 font-size: 25;
-            }
-            
-            .title_link {
-                font-weight: 700;
             }
             
             .actions {

@@ -20,6 +20,7 @@ class HomePage(private val subscriptions: Subscriptions) {
     fun asHtml(): String {
         return """|
             |<html>
+            |<head><style>${style()}</style></head>
             |<body>
             |   <table>
             |       <tbody>
@@ -29,6 +30,14 @@ class HomePage(private val subscriptions: Subscriptions) {
             |</body>
             |</html>
         """.trimMargin()
+    }
+
+    private fun style(): String {
+        return """
+            a {
+                font-size: 3em;
+            }
+        """.trimIndent()
     }
 
     private fun linkRows(): String {

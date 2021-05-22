@@ -109,7 +109,7 @@ class FeedDivTest {
                 |    <div><a href="/read/ecQtfX6DhlbdNxbGorU4CBvRunw=/S703KZLSnJyg9pgrpB8toGqhEQg=">Mark read to here</a></div>
                 |    </td>
                 |    <td class="content">
-                |    <div class="title_link"><a href="https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386" target="S703KZLSnJyg9pgrpB8toGqhEQg=">Footage of a man being arrested by police in Melbourne's north.</a></div>
+                |    <div><a class="title_link" href="https://www.abc.net.au/news/2020-09-14/footage-shows-the-man-being-struck-by-a-police-car./12663386" target="S703KZLSnJyg9pgrpB8toGqhEQg=">Footage of a man being arrested by police in Melbourne's north.</a></div>
                 |    <div>Footage of the man's arrest showed him running from police and striking a police car, before he was hit by a police car.</div>
                 |    <div>Published at Mon, 14 Sep 2020 20:51:10 +1000</div>
                 |    <div><p/></div>
@@ -123,7 +123,7 @@ class FeedDivTest {
                 |    <div><a href="/read/ecQtfX6DhlbdNxbGorU4CBvRunw=/qdmNgHhyl9deZuRho6wd8lssaDQ=">Mark read to here</a></div>
                 |    </td>
                 |    <td class="content">
-                |    <div class="title_link"><a href="https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598" target="qdmNgHhyl9deZuRho6wd8lssaDQ=">How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community</a></div>
+                |    <div><a class="title_link" href="https://www.abc.net.au/news/2020-09-15/indigenous-communities-in-melbourne-spread-coronavirus-message/12662598" target="qdmNgHhyl9deZuRho6wd8lssaDQ=">How a 'heaven-sent' health worker is helping keep coronavirus cases low in the Indigenous community</a></div>
                 |    <div><p>Indigenous Australians are particularly vulnerable to coronavirus, but Aboriginal health workers in Melbourne are using their intimate knowledge of their community to ensure critical health messages get through.</p></div>
                 |    <div>Published at Sun, 27 Sep 2020 17:30:00 +1000</div>
                 |    <div><p/></div>
@@ -148,7 +148,7 @@ class FeedDivTest {
                 |    <div><a href="/read/ecQtfX6DhlbdNxbGorU4CBvRunw=/X5ZkaXzTpIZc0l0MjEuNNojQEjw=">Mark read to here</a></div>
                 |    </td>
                 |    <td class="content">
-                |    <div class="title_link"><a href="https://theconversation.com/the-budget-assumes-a-covid-19-vaccine-becomes-available-next-year-is-this-feasible-147557" target="X5ZkaXzTpIZc0l0MjEuNNojQEjw=">The budget assumes a COVID-19 vaccine becomes available next year. Is this feasible?</a></div>
+                |    <div><a class="title_link" href="https://theconversation.com/the-budget-assumes-a-covid-19-vaccine-becomes-available-next-year-is-this-feasible-147557" target="X5ZkaXzTpIZc0l0MjEuNNojQEjw=">The budget assumes a COVID-19 vaccine becomes available next year. Is this feasible?</a></div>
                 |    <div>Summary text</div>
                 |    <div onclick="document.getElementById('X5ZkaXzTpIZc0l0MjEuNNojQEjw=').setAttribute('style', 'display: block')"><b>More >>></b></div>
                 |    <div id="X5ZkaXzTpIZc0l0MjEuNNojQEjw=" style="display: none">Some content text</div>
