@@ -30,7 +30,7 @@ class SectionPage(private val feedDivs: List<FeedDiv>) {
     private fun style(): String {
         return """
             a {
-                font-size: 3em;
+                font-size: 2em;
                 font-weight: bold;
             }
 

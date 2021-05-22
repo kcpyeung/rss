@@ -35,7 +35,7 @@ class HomePage(private val subscriptions: Subscriptions) {
     private fun style(): String {
         return """
             a {
-                font-size: 3em;
+                font-size: 2em;
             }
         """.trimIndent()
     }
