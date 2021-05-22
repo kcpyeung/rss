@@ -22,7 +22,7 @@ class ItemDiv(index: Int, private val item: Item, private val feedDiv: FeedDiv) 
     private fun content(): String {
         return """|<td class="content">
                 |    <div><a class="title_link" href="${item.link}" target="${item.guid}">${item.title}</a></div>
-                |    <div>${item.description}</div>
+                |    <div><content>${item.description}</content></div>
                 |    """.trimMargin() +
           detailText() +
              """|<div>Published at ${df.format(item.pubDate)}</div>

@@ -51,7 +51,8 @@ class SectionPage(private val feedDivs: List<FeedDiv>) {
                 width: 30%
             }
 
-            .content {
+            content {
+                font-size: 2em;
                 width: 70%
             }
         """.trimIndent()
