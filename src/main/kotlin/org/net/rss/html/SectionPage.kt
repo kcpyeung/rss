@@ -48,7 +48,8 @@ class SectionPage(private val feedDivs: List<FeedDiv>) {
             }
             
             .actions {
-                width: 30%
+                width: 30%;
+                vertical-align: bottom;
             }
 
             content {
