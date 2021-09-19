@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.4.32"
     application
 }
 
@@ -7,6 +7,8 @@ application {
     mainClass.set("org.net.rss.ServerKt")
 }
 tasks.jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     manifest {
         attributes["Main-Class"] = "org.net.rss.ServerKt"
     }
@@ -23,6 +25,9 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:2.11.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.3")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.11.3")
+
+    implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.32")
 
     implementation("org.http4k:http4k-core:3.262.0")
     implementation("org.http4k:http4k-server-netty:3.262.0")
